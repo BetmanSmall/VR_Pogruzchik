@@ -1,0 +1,56 @@
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\ClimbGrabPoint.cs(34,36): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\PlayerClimbingXR.cs(73,40): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\PlayerClimbingXR.cs(76,39): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\PlayerClimbingXR.cs(84,17): warning CS0618: 'ContinuousMoveProvider.useGravity' is obsolete: 'Controlling gravity directly in the move provider has been deprecated in XRI 3.1.0, use Gravity Provider instead.'
+
+Assets\XRI Starter Kit\Assets\Features\Distance Grabbing\Scripts\DistanceGrabber.cs(169,38): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\PlayerClimbingXR.cs(246,13): warning CS0618: 'ContinuousMoveProvider.useGravity' is obsolete: 'Controlling gravity directly in the move provider has been deprecated in XRI 3.1.0, use Gravity Provider instead.'
+
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\PlayerClimbingXR.cs(260,13): warning CS0618: 'ContinuousMoveProvider.useGravity' is obsolete: 'Controlling gravity directly in the move provider has been deprecated in XRI 3.1.0, use Gravity Provider instead.'
+
+Assets\XRI Starter Kit\Assets\Features\Climbing\Scripts\PlayerClimbingXR.cs(270,13): warning CS0618: 'ContinuousMoveProvider.useGravity' is obsolete: 'Controlling gravity directly in the move provider has been deprecated in XRI 3.1.0, use Gravity Provider instead.'
+
+Assets\XRI Starter Kit\Assets\Features\Hand Poser\HandPoseUpgrader\HandPoserReferenceTool.cs(148,87): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'
+
+Assets\XRI Starter Kit\Assets\Features\Hand Poser\HandPoseUpgrader\HandPoserReferenceTool.cs(148,29): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'
+
+Assets\XRI Starter Kit\Assets\Features\Hand Poser\HandPoseUpgrader\HandPoserReferenceTool.cs(346,87): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'
+
+Assets\XRI Starter Kit\Assets\Features\Hand Poser\HandPoseUpgrader\HandPoserReferenceTool.cs(346,29): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'
+
+Assets\XRI Starter Kit\Assets\Features\Inventory\Scripts\GameObjectCloner.cs(56,39): warning CS0618: 'ColorMaterialPropertyAffordanceReceiver' is obsolete: 'The Affordance System namespace and all associated classes have been deprecated. The existing affordance system will be moved, replaced and updated with a new interaction feedback system in a future version of XRI.'
+
+Assets\XRI Starter Kit\Assets\Scripts\TwoHanded Grabbing\SecondaryGrabFollow.cs(60,38): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Features\Inventory\Scripts\InventorySlotItemHandler.cs(52,34): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Interactables\Guns\Scripts\GunCocking.cs(64,38): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Interactables\Grenades\Grenade.cs(25,34): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Interactables\Guns\Scripts\MagazineAttachPoint.cs(75,38): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\MiniGames\ZombieGame\Scripts\Zombie.cs(89,22): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Scripts\ReleaseHandAtDistance.cs(32,38): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\Official Unity Assets\XRI\Scripts\KeyLockSystem\Keychain.cs(38,39): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+
+Assets\XRI Starter Kit\Assets\Official Unity Assets\XRI\Scripts\KeyLockSystem\Keychain.cs(52,31): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+
+Assets\XRI Starter Kit\Assets\Official Unity Assets\XRI\Scripts\KeyLockSystem\Keychain.cs(64,38): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+
+Assets\XRI Starter Kit\Assets\Official Unity Assets\XRI\Scripts\KeyLockSystem\Keychain.cs(70,58): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
+
+Assets\XRI Starter Kit\Assets\MiniGames\ZombieGame\Scripts\ZombieGame.cs(207,58): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'
+
+Assets\XRI Starter Kit\Assets\MiniGames\ZombieGame\Scripts\ZombieGame.cs(207,32): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'
+
+Assets\XRI Starter Kit\Assets\Scripts\Player\IgnoreCharacterControllerCollider.cs(12,34): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\XRI Starter Kit\Assets\WIP\GrapplingGun.cs(31,40): warning CS0414: The field 'GrapplingGun.maxHookDistance' is assigned but its value is never used
+
