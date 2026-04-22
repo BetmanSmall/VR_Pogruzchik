@@ -357,6 +357,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.yasirkula.inspectplus": {
+      "version": "https://github.com/yasirkula/UnityInspectPlus.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "04f6baf3f57a2684f950f8e3e91a10ed4f95bcb7"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
