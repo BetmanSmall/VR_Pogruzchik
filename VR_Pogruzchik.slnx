@@ -23,6 +23,7 @@
   <Project Path="Timeline.Samples.Utilities.csproj" />
   <Project Path="Timeline.Samples.Annotation.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Unity.Recorder.Samples.Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.Hands.Editor.csproj" />
 </Solution>
