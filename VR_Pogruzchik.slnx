@@ -1,14 +1,28 @@
 ﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="MikeNspiredXRIStarterKit.Runtime.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" />
+  <Project Path="Timeline.Samples.Text.csproj" />
   <Project Path="Unity.XR.Hands.Samples.VisualizerSample.csproj" />
+  <Project Path="FFmpeg.Encoding.Editor.csproj" />
+  <Project Path="Timeline.Samples.Tween.Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.Hands.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="ControllerSample.csproj" />
   <Project Path="MikeNspired XR HandPoser Editor.csproj" />
+  <Project Path="Timeline.Samples.Text.Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" />
+  <Project Path="Timeline.Samples.Annotation.Editor.csproj" />
+  <Project Path="Timeline.Samples.Tween.csproj" />
+  <Project Path="Samples.GameplaySequence.csproj" />
+  <Project Path="Timeline.Samples.Video.csproj" />
+  <Project Path="Timeline.Samples.TimeDilation.csproj" />
+  <Project Path="Timeline.Samples.Video.Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.csproj" />
+  <Project Path="Timeline.Samples.Utilities.Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.Editor.csproj" />
+  <Project Path="Timeline.Samples.Utilities.csproj" />
+  <Project Path="Timeline.Samples.Annotation.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" />
+  <Project Path="Unity.Recorder.Samples.Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.Hands.Editor.csproj" />
 </Solution>
