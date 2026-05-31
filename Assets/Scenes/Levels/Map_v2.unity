@@ -673,6 +673,28 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
+--- !u!114 &2060118485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2956880050737125642, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
+  m_PrefabInstance: {fileID: 552261177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fb50fb55a6dbf74682f2c6729b1ad5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2060118489 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1237341704635388891, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
+  m_PrefabInstance: {fileID: 552261177}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2ea7e399e39544186868b9f8df27ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3654873437594776947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -721,6 +743,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2348227762633496212, guid: 511d7252c4c0ea34388e8c0690bc04c9, type: 3}
+      propertyPath: worldLighting
+      value: 
+      objectReference: {fileID: 2060118489}
+    - target: {fileID: 2348227762633496212, guid: 511d7252c4c0ea34388e8c0690bc04c9, type: 3}
+      propertyPath: lightListActivator
+      value: 
+      objectReference: {fileID: 2060118485}
     - target: {fileID: 6190666891394872534, guid: 511d7252c4c0ea34388e8c0690bc04c9, type: 3}
       propertyPath: m_Name
       value: Map_v2
