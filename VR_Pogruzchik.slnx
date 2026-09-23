@@ -3,6 +3,7 @@
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" />
   <Project Path="RuntimeInspector.Runtime.csproj" />
   <Project Path="MikeNspiredXRIStarterKit.Runtime.csproj" />
+  <Project Path="LIV.csproj" />
   <Project Path="Tayx.Graphy.Editor.csproj" />
   <Project Path="Tayx.Graphy.csproj" />
   <Project Path="Timeline.Samples.Text.csproj" />
@@ -18,6 +19,7 @@
   <Project Path="Samples.GameplaySequence.csproj" />
   <Project Path="Timeline.Samples.Video.csproj" />
   <Project Path="Timeline.Samples.TimeDilation.csproj" />
+  <Project Path="LIVEditor.csproj" />
   <Project Path="Timeline.Samples.Video.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.csproj" />
