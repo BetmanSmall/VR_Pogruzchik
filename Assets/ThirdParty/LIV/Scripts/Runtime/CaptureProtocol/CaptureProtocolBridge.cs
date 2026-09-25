@@ -73,6 +73,20 @@ namespace LIV.SDK.Unity
                 return SDKBridge.ErrorCode.ERR_CAPTURE_PROTOCOL_ALREADY_EXISTS;
 
 #if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN) && UNITY_64
+            // LIV_Bridge (shipped with the LIV App) only understands Direct3D 11 textures, but
+            // SDKUtils.GetDevice() reports Direct3D 12 as the same DIRECTX device. On D3D12 the bridge
+            // receives an ID3D12Resource as if it were an ID3D11Texture2D and crashes the Editor/player
+            // with an access violation in PublishTextures as soon as the LIV App starts capturing.
+            // Refuse to load the bridge instead, so a wrong Graphics API is reported rather than a crash.
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Direct3D11)
+            {
+                Debug.LogError(
+                    "LIV SDK " + SDKConstants.SDK_VERSION + " requires Direct3D 11, but the current Graphics API is " + SystemInfo.graphicsDeviceType + ". " +
+                    "LIV functionality disabled for this session. Set Player Settings > Windows > Other Settings > Graphics APIs for Windows to Direct3D11 only " +
+                    "(untick Auto Graphics API for Windows) and restart the Editor.");
+                return SDKBridge.ErrorCode.ERR_CAPTURE_PROTOCOL_BRIDGE_LOADING_FAILED;
+            }
+
             if (!LIV_Native.LIV_Load())
             {
                 Debug.Log("LIV Application is either not installed, or installed but has never been ran by user. LIV functionality disabled for this session. Please install LIV from Steam then start the program to continue integration. https://store.steampowered.com/app/755540/LIV/");
