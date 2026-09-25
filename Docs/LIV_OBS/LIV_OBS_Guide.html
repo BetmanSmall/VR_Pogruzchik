@@ -1,0 +1,586 @@
+<title>MR-съёмка «Погрузчика»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg: #F3F5F2;
+    --surface: #FFFFFF;
+    --ink: #16201B;
+    --muted: #55625A;
+    --line: #D6DED8;
+    --key: #00A651;
+    --key-ink: #00733A;
+    --key-soft: #E3F4EA;
+    --caution: #F2B705;
+    --caution-ink: #3A2E00;
+    --caution-soft: #FDF3CF;
+    --code-bg: #ECF0EC;
+    --stripe-dark: #16201B;
+    --font-display: "Unbounded", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0E1411;
+      --surface: #151D18;
+      --ink: #E4EBE6;
+      --muted: #9AA89F;
+      --line: #28352D;
+      --key: #2FCB75;
+      --key-ink: #62DE9A;
+      --key-soft: #173524;
+      --caution: #F2C230;
+      --caution-ink: #F7D970;
+      --caution-soft: #2E2710;
+      --code-bg: #1B251F;
+      --stripe-dark: #0E1411;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0E1411;
+    --surface: #151D18;
+    --ink: #E4EBE6;
+    --muted: #9AA89F;
+    --line: #28352D;
+    --key: #2FCB75;
+    --key-ink: #62DE9A;
+    --key-soft: #173524;
+    --caution: #F2C230;
+    --caution-ink: #F7D970;
+    --caution-soft: #2E2710;
+    --code-bg: #1B251F;
+    --stripe-dark: #0E1411;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 16px/1.6 var(--font-body);
+    padding-inline: 20px;
+    padding-block: 0 64px;
+  }
+  a { color: var(--key-ink); text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--key); outline-offset: 2px; }
+
+  .hazard {
+    height: 10px;
+    margin-inline: -20px;
+    background: repeating-linear-gradient(-45deg, var(--caution) 0 14px, var(--stripe-dark) 14px 28px);
+  }
+  .wrap { max-width: 1120px; margin-inline: auto; }
+
+  header.top { padding-block: 40px 28px; display: grid; gap: 14px; max-width: 820px; }
+  .eyebrow {
+    font: 500 12px/1.4 var(--font-mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    font: 600 clamp(28px, 4.4vw, 44px)/1.12 var(--font-display);
+    letter-spacing: -.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lead { font-size: 18px; color: var(--muted); margin: 0; max-width: 66ch; }
+  .versions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .versions span {
+    font: 500 12px/1 var(--font-mono);
+    padding: 7px 9px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+
+  .chain { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 18px 10px; }
+  .chain-title { font: 600 15px/1.3 var(--font-body); margin: 0 0 6px; }
+  .chain-scroll { overflow-x: auto; }
+  .chain svg { display: block; width: 100%; min-width: 700px; height: auto; }
+  .chain .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+  .chain .box.liv { fill: var(--key-soft); stroke: var(--key); stroke-width: 2; }
+  .chain .t { fill: var(--ink); font: 600 13px var(--font-body); }
+  .chain .s { fill: var(--muted); font: 400 11.5px var(--font-body); }
+  .chain .edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  .chain .edge.audio { stroke-dasharray: 5 4; }
+  .chain .head { fill: var(--muted); }
+  .chain .el { fill: var(--muted); font: 400 11px var(--font-mono); }
+
+  .layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 40px; margin-top: 36px; align-items: start; }
+  nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); font-size: 14px; }
+  nav.toc p { margin: 0 0 8px; }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: toc; }
+  nav.toc li { counter-increment: toc; }
+  nav.toc a {
+    display: grid; grid-template-columns: 26px 1fr; gap: 6px;
+    padding: 6px 8px; border-radius: 4px;
+    color: var(--ink); text-decoration: none;
+  }
+  nav.toc a::before { content: counter(toc); font: 500 12px/1.9 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  nav.toc a:hover { background: var(--code-bg); }
+  nav.toc .extra a::before { content: "·"; }
+
+  main { display: grid; gap: 48px; min-width: 0; }
+  section.stage { display: grid; gap: 14px; scroll-margin-top: 20px; }
+  .stage-head { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+  .num { font: 600 15px/1 var(--font-mono); color: var(--key-ink); font-variant-numeric: tabular-nums; }
+  h2 { font: 600 clamp(20px, 2.6vw, 25px)/1.25 var(--font-display); margin: 0; text-wrap: balance; }
+  h3 { font: 600 17px/1.35 var(--font-body); margin: 8px 0 0; }
+  p { margin: 0; max-width: 68ch; }
+  .muted { color: var(--muted); }
+
+  ol.steps, ul.plain { margin: 0; padding-left: 22px; display: grid; gap: 8px; max-width: 72ch; }
+  ol.steps li::marker { font: 500 14px var(--font-mono); color: var(--muted); }
+  ul.plain li::marker { color: var(--key); }
+
+  .ui {
+    font: 500 .86em/1 var(--font-mono);
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 5px;
+    white-space: nowrap;
+  }
+  code, .path { font: 400 .88em var(--font-mono); background: var(--code-bg); border-radius: 3px; padding: 1px 4px; overflow-wrap: anywhere; }
+  .arrow { color: var(--muted); padding-inline: 2px; }
+
+  .note, .warn {
+    border-radius: 6px; padding: 12px 14px; max-width: 72ch;
+    display: grid; gap: 6px; font-size: 15px;
+  }
+  .note { background: var(--key-soft); }
+  .warn { background: var(--caution-soft); }
+  .tag {
+    justify-self: start;
+    font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+    padding: 4px 6px; border-radius: 3px;
+  }
+  .note .tag { background: var(--key); color: #fff; }
+  .warn .tag { background: var(--caution); color: #2A2100; }
+
+  .gear { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .gear div { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; }
+  .gear b { font-weight: 600; }
+  .gear span { color: var(--muted); font-size: 14px; }
+
+  .table-scroll { overflow-x: auto; max-width: 100%; }
+  table { border-collapse: collapse; font-size: 15px; min-width: 520px; width: 100%; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 600 12px/1.3 var(--font-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .downloads { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 14px; }
+  .dl-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  button.dl {
+    font: 600 15px/1.2 var(--font-body);
+    display: grid; gap: 3px; text-align: left;
+    padding: 12px 16px; border-radius: 6px; cursor: pointer;
+    border: 1.5px solid var(--key); background: var(--key-soft); color: var(--ink);
+  }
+  button.dl small { font: 400 12px/1.3 var(--font-mono); color: var(--muted); }
+  button.dl:hover { background: var(--key); color: #fff; }
+  button.dl:hover small { color: #fff; }
+  button.dl[disabled] { opacity: .5; cursor: not-allowed; background: var(--code-bg); border-color: var(--line); color: var(--muted); }
+  #dl-status { font-size: 14px; color: var(--muted); min-height: 1.4em; }
+
+  .checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-width: 72ch; }
+  .checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; cursor: pointer; padding: 6px 8px; border-radius: 4px; }
+  .checklist label:hover { background: var(--code-bg); }
+  .checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--key); }
+  .checklist input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+  .check-tools { display: flex; gap: 12px; align-items: center; font-size: 14px; color: var(--muted); }
+  .linkbtn { font: inherit; color: var(--key-ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+  dl.faq { margin: 0; display: grid; gap: 14px; max-width: 74ch; }
+  dl.faq dt { font-weight: 600; }
+  dl.faq dd { margin: 4px 0 0; color: var(--ink); }
+
+  footer.src { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 18px; font-size: 14px; color: var(--muted); display: grid; gap: 8px; }
+  footer.src ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; gap: 24px; }
+    nav.toc { position: static; }
+    nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  html { scroll-behavior: smooth; }
+</style>
+
+<div class="hazard" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Кванториум · VR-тренажёр «Вилочный погрузчик»</div>
+    <h1>Съёмка в смешанной реальности через LIV и OBS</h1>
+    <p class="lead">Как собрать стенд, где игрок снят обычной USB-вебкамерой на зелёном фоне и помещён внутрь склада из тренажёра. Камеру отслеживает Vive Tracker, поэтому её можно переставлять без повторной калибровки. Внизу страницы есть готовые файлы для импорта в OBS.</p>
+    <div class="versions" aria-label="Проверенные версии">
+      <span>LIV App 2.16</span><span>LIV SDK 2.1.2</span><span>OBS Studio 32</span><span>SteamVR</span><span>HTC Vive · Vive Pro · Index</span>
+    </div>
+  </header>
+
+  <figure class="chain" style="margin:0">
+    <p class="chain-title">Что с чем соединено</p>
+    <div class="chain-scroll">
+      <svg viewBox="0 0 940 250" role="img" aria-label="Вебкамера, Vive Tracker и тренажёр передают данные в LIV; LIV собирает кадр в окне LIV Output; OBS захватывает это окно и звук тренажёра и пишет видео.">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="head" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <rect class="box" x="10" y="14" width="200" height="54" rx="6"></rect>
+        <text class="t" x="24" y="38">USB-вебкамера</text>
+        <text class="s" x="24" y="56">игрок на зелёном фоне</text>
+
+        <rect class="box" x="10" y="98" width="200" height="54" rx="6"></rect>
+        <text class="t" x="24" y="122">Vive Tracker → SteamVR</text>
+        <text class="s" x="24" y="140">положение и поворот камеры</text>
+
+        <rect class="box" x="10" y="182" width="200" height="54" rx="6"></rect>
+        <text class="t" x="24" y="206">VR_Pogruzchik_Map2.exe</text>
+        <text class="s" x="24" y="224">LIV SDK: слои игры</text>
+
+        <rect class="box liv" x="290" y="84" width="210" height="82" rx="6"></rect>
+        <text class="t" x="306" y="112">LIV App</text>
+        <text class="s" x="306" y="131">вырезает зелёный фон и ставит</text>
+        <text class="s" x="306" y="148">игрока между слоями игры</text>
+
+        <rect class="box" x="540" y="98" width="140" height="54" rx="6"></rect>
+        <text class="t" x="554" y="122">Окно LIV Output</text>
+        <text class="s" x="554" y="140">готовый кадр</text>
+
+        <rect class="box" x="780" y="98" width="150" height="54" rx="6"></rect>
+        <text class="t" x="794" y="122">OBS Studio</text>
+        <text class="s" x="794" y="140">запись MP4 / стрим</text>
+
+        <path class="edge" d="M210,41 C250,41 250,100 288,104" marker-end="url(#ah)"></path>
+        <path class="edge" d="M210,125 L288,125" marker-end="url(#ah)"></path>
+        <path class="edge" d="M210,209 C250,209 250,150 288,146" marker-end="url(#ah)"></path>
+        <path class="edge" d="M500,125 L538,125" marker-end="url(#ah)"></path>
+        <path class="edge" d="M680,125 L778,125" marker-end="url(#ah)"></path>
+        <path class="edge audio" d="M210,226 L855,226 L855,154" marker-end="url(#ah)"></path>
+        <text class="el" x="692" y="115">Захват игры</text>
+        <text class="el" x="585" y="219">звук тренажёра (захват звука приложения)</text>
+      </svg>
+    </div>
+  </figure>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Содержание">
+      <p class="eyebrow">Этапы</p>
+      <ol>
+        <li><a href="#gear">Оборудование и программы</a></li>
+        <li><a href="#stand">Стенд: фон, свет, камера</a></li>
+        <li><a href="#steamvr">SteamVR и трекер</a></li>
+        <li><a href="#liv">LIV: драйвер и профиль камеры</a></li>
+        <li><a href="#calib">Калибровка камеры</a></li>
+        <li><a href="#key">Кеинг и задержка</a></li>
+        <li><a href="#capture">Запуск захвата</a></li>
+        <li><a href="#obs">OBS: импорт и запись</a></li>
+        <li><a href="#check">Проверка перед записью</a></li>
+      </ol>
+      <ol class="extra" style="margin-top:10px">
+        <li><a href="#faq">Если что-то не так</a></li>
+        <li><a href="#files">Файлы OBS</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <section class="stage" id="gear">
+        <div class="stage-head"><span class="num">01</span><h2>Оборудование и программы</h2></div>
+        <div class="gear">
+          <div><b>ПК с Windows 10/11 x64</b><span>Видеокарта NVIDIA желательна: OBS пишет видео через NVENC и не нагружает процессор.</span></div>
+          <div><b>HTC Vive, Vive Pro или Valve Index</b><span>Две базовые станции. Трекер работает в том же пространстве, что и шлем.</span></div>
+          <div><b>HTC Vive Tracker + USB-донгл</b><span>Крепится к камере винтом 1/4″. Донгл лучше вынести на удлинителе в зону видимости.</span></div>
+          <div><b>USB-вебкамера 1080p, 30 к/с</b><span>С ручной экспозицией и балансом белого. Автоподстройка мешает кеингу.</span></div>
+          <div><b>Штатив и крепление</b><span>Трекер и камера должны быть соединены жёстко, без люфта.</span></div>
+          <div><b>Зелёный фон и свет</b><span>Два источника на фон, один-два на игрока. Фон освещён ровно, без складок.</span></div>
+        </div>
+        <ul class="plain">
+          <li>Steam и SteamVR.</li>
+          <li><a href="https://store.steampowered.com/app/755540/LIV/" target="_blank" rel="noopener">LIV</a> из Steam (бесплатно).</li>
+          <li><a href="https://obsproject.com/download" target="_blank" rel="noopener">OBS Studio</a> версии 30 или новее.</li>
+          <li>Windows-сборка тренажёра <code>VR_Pogruzchik_Map2.exe</code>, собранная на Direct3D 11.</li>
+        </ul>
+        <div class="warn">
+          <span class="tag">Важно</span>
+          <p>LIV работает только с DirectX 11. Сборка на DirectX 12 вылетает, как только в LIV выбирают её как Target. В проекте уже стоит Direct3D 11, поэтому берите сборку, сделанную после этого изменения. Если сборка старая, пересоберите её.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="stand">
+        <div class="stage-head"><span class="num">02</span><h2>Стенд: фон, свет, камера</h2></div>
+        <ol class="steps">
+          <li>Поставьте игровую зону в 1,5–2 м перед зелёным фоном. Так на игрока не попадает зелёный отсвет, а тень не ложится на фон.</li>
+          <li>Осветите фон отдельно и равномерно, без бликов и тёмных углов. Игрока подсветите спереди другим светом.</li>
+          <li>Установите вебкамеру на штатив так, чтобы игрок с вытянутыми руками целиком помещался в кадр и за ним везде был зелёный фон.</li>
+          <li>Закрепите Vive Tracker на камере через резьбу 1/4″ (крепление «холодный башмак» или площадка). Трекер должен смотреть на базовые станции, светодиод не закрыт.</li>
+          <li>Отключите в ПО камеры автоэкспозицию, автобаланс белого и автофокус. Частоту сети (антимерцание) поставьте 50 Гц.</li>
+        </ol>
+        <div class="note">
+          <span class="tag">Совет</span>
+          <p>Камерой в каждый момент может пользоваться только одна программа. Если настраиваете экспозицию через OBS (<span class="ui">Устройство захвата видео</span> <span class="arrow">→</span> <span class="ui">Настроить видео</span>), удалите этот источник до запуска LIV. В готовых сценах OBS вебкамеры нет специально.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="steamvr">
+        <div class="stage-head"><span class="num">03</span><h2>SteamVR и трекер</h2></div>
+        <ol class="steps">
+          <li>Вставьте донгл трекера в USB и запустите SteamVR.</li>
+          <li>Меню SteamVR <span class="arrow">→</span> <span class="ui">Devices</span> <span class="arrow">→</span> <span class="ui">Pair Controller</span> <span class="arrow">→</span> <span class="ui">HTC VIVE Tracker</span>. Зажмите кнопку питания трекера, пока индикатор не замигает синим. После сопряжения индикатор горит зелёным, а в окне SteamVR появляется значок трекера.</li>
+          <li><span class="ui">Settings</span> <span class="arrow">→</span> <span class="ui">Controllers</span> <span class="arrow">→</span> <span class="ui">Manage Trackers</span>: выберите для трекера роль <span class="ui">Camera</span>. Тогда тренажёр не примет трекер за руку.</li>
+          <li><span class="ui">Settings</span> <span class="arrow">→</span> <span class="ui">OpenXR</span> (раздел виден при <span class="ui">Advanced Settings: Show</span>): если SteamVR не текущая среда OpenXR, нажмите <span class="ui">Set SteamVR as OpenXR runtime</span>. Тренажёр работает через OpenXR, и LIV видит его только через SteamVR.</li>
+          <li><span class="ui">Settings</span> <span class="arrow">→</span> <span class="ui">Video</span>: разрешение рендера <span class="ui">Custom</span>, 100%. Автоматическое суперсэмплирование не учитывает нагрузку от LIV.</li>
+        </ol>
+      </section>
+
+      <section class="stage" id="liv">
+        <div class="stage-head"><span class="num">04</span><h2>LIV: драйвер и профиль камеры</h2></div>
+        <h3>Драйвер (один раз на ПК)</h3>
+        <ol class="steps">
+          <li>Запустите LIV. Слева внизу откройте <span class="ui">General Settings</span> и в пункте <span class="ui">LIV SteamVR Driver</span> нажмите <span class="ui">Install</span>.</li>
+          <li>Перезапустите SteamVR.</li>
+        </ol>
+        <h3>Профиль камеры</h3>
+        <ol class="steps">
+          <li>Выберите <span class="ui">Mixed Reality Capture</span> <span class="arrow">→</span> <span class="ui">Start MR</span>.</li>
+          <li>Слева откройте <span class="ui">CAMERA</span> и нажмите зелёную камеру с плюсом, чтобы создать профиль.</li>
+          <li><span class="ui">Type</span>: <span class="ui">Video Camera</span>. <span class="ui">Device</span>: ваша вебкамера.</li>
+          <li><span class="ui">Resolution</span>: 1920×1080, 30 к/с. Формат YUY2 работает быстрее, но многие USB-камеры дают в нём только 5 к/с на 1080p. В таком случае выберите MJPEG.</li>
+          <li>Назовите профиль, например «Вебкамера + трекер», и нажмите <span class="ui">Save</span>.</li>
+        </ol>
+        <div class="warn">
+          <span class="tag">Не включайте</span>
+          <p>Опцию <span class="ui">Meta Quest Camera offset</span>: она ломает калибровку. Она нужна только для Quest, а у нас шлем на базовых станциях.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="calib">
+        <div class="stage-head"><span class="num">05</span><h2>Калибровка камеры</h2></div>
+        <p>Калибровка сообщает LIV, где стоит объектив относительно трекера и какой у камеры угол обзора. Пока трекер не сдвинулся на камере, повторять её не нужно, даже если переставить штатив.</p>
+        <ol class="steps">
+          <li>Во вкладке <span class="ui">CAMERA</span> нажмите <span class="ui">Edit</span> у профиля и откройте <span class="ui">Calibration</span>.</li>
+          <li>В списке <span class="ui">Tracker</span> выберите свой Vive Tracker (серийный номер вида <code>LHR-XXXXXXXX</code>).</li>
+          <li>Нажмите <span class="ui">Begin Calibration</span>: запустится инструмент VIVR. Выберите <span class="ui">Calibrate From Headset</span> и наденьте шлем. Вариант <span class="ui">From Desktop</span> удобен, если калибрует помощник у монитора.</li>
+          <li>Камера во время калибровки стоит неподвижно. Нажмите курок, появится красный крест.</li>
+          <li><b>Точка 1.</b> Поднесите контроллер вплотную к объективу и совместите крест с контроллером: у Vive кольцо контроллера обводит крест, у Index центр курка на центре креста. Нажмите курок.</li>
+          <li><b>Точки 2 и 3.</b> Отойдите как можно дальше, пока индикатор расстояния не станет зелёным. Совместите крест в углах кадра так же и нажмите курок.</li>
+          <li>Проверьте результат: виртуальные контроллеры должны лечь на настоящие. Если есть сдвиг, подправьте ползунками ручной настройки и нажмите <span class="ui">Save</span>.</li>
+        </ol>
+        <h3>Точная подстройка</h3>
+        <ol class="steps">
+          <li>Встаньте близко к камере, держите контроллер в центре кадра. Подгоните X/Y/Z, чтобы размер виртуального контроллера совпал с настоящим.</li>
+          <li>Отойдите далеко, руки в стороны. Подгоните наклон (pitch) и поворот (yaw).</li>
+          <li>Если контроллеры по краям кадра уходят внутрь или наружу, поправьте FoV. Проверьте то же вблизи.</li>
+          <li>Встаньте в центр, руки в стороны, выровняйте крен (roll). Повторяйте, пока контроллеры не совпадут в любой точке кадра.</li>
+        </ol>
+      </section>
+
+      <section class="stage" id="key">
+        <div class="stage-head"><span class="num">06</span><h2>Кеинг и задержка</h2></div>
+        <h3>Кеинг (вырезание фона)</h3>
+        <ol class="steps">
+          <li>В редакторе профиля камеры откройте раздел кеинга (<span class="ui">Keying</span>) и укажите зелёный цвет фона.</li>
+          <li>Подвигайте ползунки, пока фон не исчезнет полностью, а у игрока не останется дыр и зелёной каймы. Названия ползунков зависят от версии LIV, поэтому ориентируйтесь на превью.</li>
+          <li>Если кайма остаётся, сначала поправьте свет на фоне и отодвиньте игрока, и только потом усиливайте кеинг.</li>
+        </ol>
+        <h3>Задержка (Latency)</h3>
+        <p>Вебкамера отдаёт кадр с опозданием, а контроллеры отслеживаются мгновенно. Поэтому виртуальные контроллеры убегают вперёд рук. Задержка в LIV придерживает игровые слои на несколько кадров, чтобы они совпали с видео.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Задержка, кадров</th><th>При 30 к/с</th><th>Когда ставить</th></tr></thead>
+            <tbody>
+              <tr><td class="n">3</td><td class="n">≈ 100 мс</td><td>Быстрая камера, контроллеры чуть отстают от рук</td></tr>
+              <tr><td class="n">4–5</td><td class="n">≈ 133–167 мс</td><td>Начальное значение для большинства USB-камер</td></tr>
+              <tr><td class="n">6–8</td><td class="n">≈ 200–267 мс</td><td>Контроллеры заметно опережают руки</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">Как подобрать: быстро махните контроллером перед камерой. Если виртуальный контроллер опережает руку, увеличьте задержку, если отстаёт, уменьшите.</p>
+      </section>
+
+      <section class="stage" id="capture">
+        <div class="stage-head"><span class="num">07</span><h2>Запуск захвата</h2></div>
+        <p>Порядок запуска важен: <b>SteamVR <span class="arrow">→</span> LIV <span class="arrow">→</span> тренажёр <span class="arrow">→</span> OBS</b>.</p>
+        <ol class="steps">
+          <li>Запустите SteamVR. Шлем, контроллеры и трекер должны гореть зелёным.</li>
+          <li>Запустите LIV, выберите <span class="ui">Mixed Reality Capture</span> <span class="arrow">→</span> <span class="ui">Start MR</span> и проверьте, что во вкладке <span class="ui">CAMERA</span> выбран ваш профиль.</li>
+          <li>Запустите <code>VR_Pogruzchik_Map2.exe</code>.</li>
+          <li>В LIV откройте <span class="ui">CAPTURE</span> <span class="arrow">→</span> <span class="ui">MANUAL</span>. В поле <span class="ui">Target</span> выберите <code>VR_Pogruzchik_Map2.exe</code>, в поле <span class="ui">Effect</span> оставьте <span class="ui">Default Compositing</span>. Кнопка <span class="ui">Export Calibration…</span> не нужна: тренажёр работает через LIV SDK.</li>
+          <li>Откроется окно <span class="ui">LIV Output</span> с игроком внутри склада. Не сворачивайте его, иначе OBS перестанет получать кадры.</li>
+          <li>Во вкладке <span class="ui">OUTPUT</span> задайте <span class="ui">Resolution</span> 1920×1080 и <span class="ui">FPS</span> 30. Если ставите 60, в OBS тоже включите 60 к/с.</li>
+          <li>Во вкладке <span class="ui">VIEWFINDER</span> включите видоискатель. В шлеме появится экран на месте объектива, и игрок увидит, как выглядит кадр.</li>
+        </ol>
+        <div class="note">
+          <span class="tag">Тренажёр в режиме AUTO</span>
+          <p>Вкладка <span class="ui">AUTO</span> находит только игры из каталога LIV. Нашего тренажёра там нет, поэтому всегда используйте <span class="ui">MANUAL</span>.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="obs">
+        <div class="stage-head"><span class="num">08</span><h2>OBS: импорт и запись</h2></div>
+        <p>Скачайте файлы из раздела <a href="#files">«Файлы OBS»</a> ниже. Они также лежат в репозитории проекта в папке <span class="path">Docs/LIV_OBS/</span>.</p>
+        <h3>Профиль (разрешение, частота кадров, запись)</h3>
+        <ol class="steps">
+          <li>Распакуйте <code>OBS_Profile_Kvantorium_LIV.zip</code>. Внутри папка <code>Kvantorium_LIV</code> с файлом <code>basic.ini</code>.</li>
+          <li>В OBS: <span class="ui">Профиль</span> <span class="arrow">→</span> <span class="ui">Импорт</span>, укажите папку <code>Kvantorium_LIV</code>.</li>
+          <li><span class="ui">Профиль</span> <span class="arrow">→</span> выберите <span class="ui">Кванториум LIV</span>.</li>
+        </ol>
+        <h3>Коллекция сцен</h3>
+        <ol class="steps">
+          <li><span class="ui">Коллекция сцен</span> <span class="arrow">→</span> <span class="ui">Импорт</span>. Нажмите <span class="ui">…</span>, выберите <code>OBS_SceneCollection_LIV_Pogruzchik.json</code>, отметьте строку галочкой и нажмите <span class="ui">Импорт</span>.</li>
+          <li><span class="ui">Коллекция сцен</span> <span class="arrow">→</span> выберите <span class="ui">Кванториум — LIV Погрузчик</span>.</li>
+        </ol>
+        <h3>Что внутри</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Сцена</th><th>Что показывает</th></tr></thead>
+            <tbody>
+              <tr><td>1. LIV — смешанная реальность</td><td>Кадр из окна LIV Output на весь экран. Титр с названием тренажёра скрыт, включается глазом в списке источников.</td></tr>
+              <tr><td>2. Вид из шлема</td><td>Окно тренажёра: то, что видит игрок.</td></tr>
+              <tr><td>3. MR + вид из шлема</td><td>Смешанная реальность и вид из шлема в углу (480×270).</td></tr>
+              <tr><td>4. Заставка</td><td>«Скоро начнём» на тёмном фоне, для пауз и начала стрима.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="plain">
+          <li><b>Картинка.</b> <span class="ui">Захват игры</span>, окно <span class="ui">[capture.exe]: LIV Output</span>. LIV рекомендует этот режим как самый быстрый.</li>
+          <li><b>Звук.</b> LIV передаёт только видео. Звук берёт источник <span class="ui">Звук тренажёра</span>: он захватывает только <code>VR_Pogruzchik_Map2.exe</code>, даже если звук идёт в наушники шлема. <span class="ui">Звук рабочего стола</span> и <span class="ui">Микрофон</span> выключены, чтобы звук не удваивался. Микрофон включите, если нужен комментарий.</li>
+          <li><b>Запись.</b> 1920×1080, 30 к/с, кодировщик NVENC, формат Hybrid MP4: файл не портится, если OBS закроется аварийно. Имя файла вида <code>Pogruzchik_LIV_2026-09-25_14-30-00.mp4</code>, папка «Видео» пользователя.</li>
+        </ul>
+        <div class="note">
+          <span class="tag">Первый запуск</span>
+          <p>После импорта откройте свойства источника <span class="ui">LIV Output (смешанная реальность)</span> и убедитесь, что в поле <span class="ui">Окно</span> выбрано <span class="ui">[capture.exe]: LIV Output</span>. Если оно пустое, выберите его из списка при запущенном захвате. Так же проверьте источник <span class="ui">Вид из шлема</span>.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="check">
+        <div class="stage-head"><span class="num">09</span><h2>Проверка перед записью</h2></div>
+        <ul class="checklist" id="checklist">
+          <li><label><input type="checkbox" id="c1"><span>В SteamVR шлем, оба контроллера и трекер горят зелёным.</span></label></li>
+          <li><label><input type="checkbox" id="c2"><span>Трекер жёстко закреплён на камере и не сдвигался после калибровки.</span></label></li>
+          <li><label><input type="checkbox" id="c3"><span>В LIV выбран нужный профиль камеры, калибровка сохранена.</span></label></li>
+          <li><label><input type="checkbox" id="c4"><span>Тренажёр запущен, в <span class="ui">CAPTURE → MANUAL</span> выбран Target, окно LIV Output показывает игрока на складе.</span></label></li>
+          <li><label><input type="checkbox" id="c5"><span>Виртуальные контроллеры совпадают с руками и в центре, и по краям кадра.</span></label></li>
+          <li><label><input type="checkbox" id="c6"><span>Фон вырезан чисто: без зелёной каймы и дыр в фигуре.</span></label></li>
+          <li><label><input type="checkbox" id="c7"><span>В OBS выбран профиль «Кванториум LIV», сцена 1 показывает картинку.</span></label></li>
+          <li><label><input type="checkbox" id="c8"><span>Индикатор громкости «Звук тренажёра» двигается, микрофон включён только если нужен.</span></label></li>
+          <li><label><input type="checkbox" id="c9"><span>На диске достаточно места для записи.</span></label></li>
+        </ul>
+        <div class="check-tools"><span id="check-count">0 из 9</span><button type="button" class="linkbtn" id="check-reset">Сбросить отметки</button></div>
+      </section>
+
+      <section class="stage" id="faq">
+        <div class="stage-head"><span class="num">?</span><h2>Если что-то не так</h2></div>
+        <dl class="faq">
+          <div><dt>Тренажёр вылетает, как только в LIV выбирают Target</dt>
+            <dd>Сборка сделана на DirectX 12. Пересоберите тренажёр: в проекте для Windows оставлен только Direct3D 11. В свежей сборке при неверном API в лог пишется ошибка <code>LIV SDK … requires Direct3D 11</code>, а не вылет.</dd></div>
+          <div><dt>Тренажёра нет в списке Target</dt>
+            <dd>Тренажёр должен быть уже запущен и работать через SteamVR. Проверьте, что SteamVR назначен средой OpenXR (этап 3), и соблюдайте порядок запуска.</dd></div>
+          <div><dt>Виртуальные контроллеры не совпадают с руками</dt>
+            <dd>Трекер мог сдвинуться на камере или потерять видимость базовых станций. Закрепите его и откалибруйте заново (этап 5).</dd></div>
+          <div><dt>Игрок двигается позже контроллеров, или наоборот</dt>
+            <dd>Подберите задержку по таблице в этапе 6.</dd></div>
+          <div><dt>Трекер ведёт себя как рука в тренажёре</dt>
+            <dd>В SteamVR назначьте трекеру роль <span class="ui">Camera</span> (этап 3) и перезапустите тренажёр.</dd></div>
+          <div><dt>LIV не видит камеру или показывает чёрный кадр</dt>
+            <dd>Камеру держит другая программа: OBS с источником вебкамеры, Zoom, ПО производителя. Закройте их и выберите устройство в профиле LIV заново.</dd></div>
+          <div><dt>В OBS чёрный экран вместо LIV Output</dt>
+            <dd>Проверьте окно в свойствах источника (этап 8). Если не помогло, запустите OBS от имени администратора или замените источник на <span class="ui">Захват окна</span> с методом захвата Windows 10 (1903+).</dd></div>
+          <div><dt>Проверка из Unity Editor, а не из сборки</dt>
+            <dd>В LIV выберите Target <code>Unity.exe</code>. Источники OBS «Вид из шлема» и «Звук тренажёра» настроены на exe сборки, для редактора выберите окно Unity в их свойствах. Редактор должен работать на DX11: в заголовке окна Unity должно быть <code>&lt;DX11&gt;</code>.</dd></div>
+          <div><dt>Картинка тормозит</dt>
+            <dd>Уменьшите Resolution во вкладке OUTPUT LIV, держите рендер SteamVR на 100%, в OBS используйте NVENC. Процессам vrserver, vrcompositor и OBS можно поднять приоритет в диспетчере задач.</dd></div>
+        </dl>
+      </section>
+
+      <section class="stage" id="files">
+        <div class="stage-head"><span class="num">↓</span><h2>Файлы OBS</h2></div>
+        <div class="downloads">
+          <div class="dl-row">
+            <button type="button" class="dl" id="dl-scenes">Коллекция сцен<small>OBS_SceneCollection_LIV_Pogruzchik.json · 33 КБ</small></button>
+            <button type="button" class="dl" id="dl-profile">Профиль записи<small>OBS_Profile_Kvantorium_LIV.zip · 1 КБ</small></button>
+          </div>
+          <p id="dl-status" role="status"></p>
+          <p class="muted" style="font-size:14px">Формат проверен на OBS Studio 32.2. Эти же файлы лежат в репозитории: <span class="path">Docs/LIV_OBS/</span>.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="src">
+    <p>Источники: справка LIV и документация LIV SDK.</p>
+    <ul>
+      <li><a href="https://help.liv.tv/hc/en-us/articles/24500446600210-LIV-Mixed-Reality-Quick-Start-Guide" target="_blank" rel="noopener">LIV Mixed Reality Quick Start Guide</a></li>
+      <li><a href="https://help.liv.tv/hc/en-us/articles/8827194338834-How-to-Setup-a-Tracked-moveable-camera" target="_blank" rel="noopener">How to: Setup a Tracked/moveable camera</a></li>
+      <li><a href="https://help.liv.tv/hc/en-us/articles/360016507779-Calibrating-Your-Camera" target="_blank" rel="noopener">Calibrating Your Camera</a> и <a href="https://help.liv.tv/hc/en-us/articles/17535451059218--ragesaqs-technique-for-getting-perfect-calibration" target="_blank" rel="noopener">точная подстройка по методу ragesaq</a></li>
+      <li><a href="https://help.liv.tv/hc/en-us/articles/360018461699-How-do-I-optimally-capture-LIV" target="_blank" rel="noopener">How do I optimally capture LIV?</a></li>
+      <li><a href="https://help.liv.tv/hc/en-us/articles/360016871619-How-To-Improve-Performance-With-LIV" target="_blank" rel="noopener">How To: Improve Performance With LIV</a></li>
+      <li><a href="https://mrc-docs.liv.tv/sdk-for-unity/quickstart" target="_blank" rel="noopener">LIV SDK for Unity: Quickstart</a> (требование DirectX 11)</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var FILES = {
+    "dl-scenes": { name: "OBS_SceneCollection_LIV_Pogruzchik.json", b64: "ew0KICAgICJuYW1lIjogItCa0LLQsNC90YLQvtGA0LjRg9C8IOKAlCBMSVYg0J/QvtCz0YDRg9C30YfQuNC6IiwNCiAgICAiRGVza3RvcEF1ZGlvRGV2aWNlMSI6IHsNCiAgICAgICAgInByZXZfdmVyIjogNTM3MDAxOTg2LA0KICAgICAgICAibmFtZSI6ICLQl9Cy0YPQuiDRgNCw0LHQvtGH0LXQs9C+INGB0YLQvtC70LAiLA0KICAgICAgICAidXVpZCI6ICJhOTc5MzU4My1iYTgwLTRiY2UtODBkMi1mNzg2MTNmZTdhNDUiLA0KICAgICAgICAiaWQiOiAid2FzYXBpX291dHB1dF9jYXB0dXJlIiwNCiAgICAgICAgInZlcnNpb25lZF9pZCI6ICJ3YXNhcGlfb3V0cHV0X2NhcHR1cmUiLA0KICAgICAgICAic2V0dGluZ3MiOiB7DQogICAgICAgICAgICAiZGV2aWNlX2lkIjogImRlZmF1bHQiDQogICAgICAgIH0sDQogICAgICAgICJtaXhlcnMiOiAyNTUsDQogICAgICAgICJzeW5jIjogMCwNCiAgICAgICAgImZsYWdzIjogMCwNCiAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgImJhbGFuY2UiOiAwLjUsDQogICAgICAgICJlbmFibGVkIjogdHJ1ZSwNCiAgICAgICAgIm11dGVkIjogdHJ1ZSwNCiAgICAgICAgInB1c2gtdG8tbXV0ZSI6IGZhbHNlLA0KICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgInB1c2gtdG8tdGFsayI6IGZhbHNlLA0KICAgICAgICAicHVzaC10by10YWxrLWRlbGF5IjogMCwNCiAgICAgICAgImhvdGtleXMiOiB7DQogICAgICAgICAgICAibGlib2JzLm11dGUiOiBbXSwNCiAgICAgICAgICAgICJsaWJvYnMudW5tdXRlIjogW10sDQogICAgICAgICAgICAibGlib2JzLnB1c2gtdG8tbXV0ZSI6IFtdLA0KICAgICAgICAgICAgImxpYm9icy5wdXNoLXRvLXRhbGsiOiBbXQ0KICAgICAgICB9LA0KICAgICAgICAiZGVpbnRlcmxhY2VfbW9kZSI6IDAsDQogICAgICAgICJkZWludGVybGFjZV9maWVsZF9vcmRlciI6IDAsDQogICAgICAgICJtb25pdG9yaW5nX3R5cGUiOiAwLA0KICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9DQogICAgfSwNCiAgICAiQXV4QXVkaW9EZXZpY2UxIjogew0KICAgICAgICAicHJldl92ZXIiOiA1MzcwMDE5ODYsDQogICAgICAgICJuYW1lIjogItCc0LjQutGA0L7RhNC+0L0iLA0KICAgICAgICAidXVpZCI6ICJmZmEzNzczNy01YzU1LTRjMTQtOTgwMy05NjE2NmZmMWE3OWMiLA0KICAgICAgICAiaWQiOiAid2FzYXBpX2lucHV0X2NhcHR1cmUiLA0KICAgICAgICAidmVyc2lvbmVkX2lkIjogIndhc2FwaV9pbnB1dF9jYXB0dXJlIiwNCiAgICAgICAgInNldHRpbmdzIjogew0KICAgICAgICAgICAgImRldmljZV9pZCI6ICJkZWZhdWx0Ig0KICAgICAgICB9LA0KICAgICAgICAibWl4ZXJzIjogMjU1LA0KICAgICAgICAic3luYyI6IDAsDQogICAgICAgICJmbGFncyI6IDAsDQogICAgICAgICJ2b2x1bWUiOiAxLjAsDQogICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAiZW5hYmxlZCI6IHRydWUsDQogICAgICAgICJtdXRlZCI6IHRydWUsDQogICAgICAgICJwdXNoLXRvLW11dGUiOiBmYWxzZSwNCiAgICAgICAgInB1c2gtdG8tbXV0ZS1kZWxheSI6IDAsDQogICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgInB1c2gtdG8tdGFsay1kZWxheSI6IDAsDQogICAgICAgICJob3RrZXlzIjogew0KICAgICAgICAgICAgImxpYm9icy5tdXRlIjogW10sDQogICAgICAgICAgICAibGlib2JzLnVubXV0ZSI6IFtdLA0KICAgICAgICAgICAgImxpYm9icy5wdXNoLXRvLW11dGUiOiBbXSwNCiAgICAgICAgICAgICJsaWJvYnMucHVzaC10by10YWxrIjogW10NCiAgICAgICAgfSwNCiAgICAgICAgImRlaW50ZXJsYWNlX21vZGUiOiAwLA0KICAgICAgICAiZGVpbnRlcmxhY2VfZmllbGRfb3JkZXIiOiAwLA0KICAgICAgICAibW9uaXRvcmluZ190eXBlIjogMCwNCiAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgIH0sDQogICAgInNvdXJjZXMiOiBbDQogICAgICAgIHsNCiAgICAgICAgICAgICJwcmV2X3ZlciI6IDUzNzAwMTk4NiwNCiAgICAgICAgICAgICJuYW1lIjogIkxJViBPdXRwdXQgKNGB0LzQtdGI0LDQvdC90LDRjyDRgNC10LDQu9GM0L3QvtGB0YLRjCkiLA0KICAgICAgICAgICAgInV1aWQiOiAiNTUxOWM4NTItZTA2MS00ZWVlLTg1YTAtMzkxMzMyNjEwNmUzIiwNCiAgICAgICAgICAgICJpZCI6ICJnYW1lX2NhcHR1cmUiLA0KICAgICAgICAgICAgInZlcnNpb25lZF9pZCI6ICJnYW1lX2NhcHR1cmUiLA0KICAgICAgICAgICAgInNldHRpbmdzIjogew0KICAgICAgICAgICAgICAgICJjYXB0dXJlX21vZGUiOiAid2luZG93IiwNCiAgICAgICAgICAgICAgICAid2luZG93IjogIkxJViBPdXRwdXQ6R0xGVzMwOmNhcHR1cmUuZXhlIiwNCiAgICAgICAgICAgICAgICAicHJpb3JpdHkiOiAyLA0KICAgICAgICAgICAgICAgICJjYXB0dXJlX2N1cnNvciI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICJhbGxvd190cmFuc3BhcmVuY3kiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAiY2FwdHVyZV9vdmVybGF5cyI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICJhbnRpX2NoZWF0X2hvb2siOiB0cnVlLA0KICAgICAgICAgICAgICAgICJsaW1pdF9mcmFtZXJhdGUiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAiY2FwdHVyZV9hdWRpbyI6IGZhbHNlDQogICAgICAgICAgICB9LA0KICAgICAgICAgICAgIm1peGVycyI6IDAsDQogICAgICAgICAgICAic3luYyI6IDAsDQogICAgICAgICAgICAiZmxhZ3MiOiAwLA0KICAgICAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLA0KICAgICAgICAgICAgIm11dGVkIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGstZGVsYXkiOiAwLA0KICAgICAgICAgICAgImhvdGtleXMiOiB7fSwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9tb2RlIjogMCwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9maWVsZF9vcmRlciI6IDAsDQogICAgICAgICAgICAibW9uaXRvcmluZ190eXBlIjogMCwNCiAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgInByZXZfdmVyIjogNTM3MDAxOTg2LA0KICAgICAgICAgICAgIm5hbWUiOiAi0JLQuNC0INC40Lcg0YjQu9C10LzQsCAo0L7QutC90L4g0YLRgNC10L3QsNC20ZHRgNCwKSIsDQogICAgICAgICAgICAidXVpZCI6ICJhOGUwNDZmMC04MjIxLTQwZTgtYjVjYy0zZGNlYTU1ZDQ3NWMiLA0KICAgICAgICAgICAgImlkIjogImdhbWVfY2FwdHVyZSIsDQogICAgICAgICAgICAidmVyc2lvbmVkX2lkIjogImdhbWVfY2FwdHVyZSIsDQogICAgICAgICAgICAic2V0dGluZ3MiOiB7DQogICAgICAgICAgICAgICAgImNhcHR1cmVfbW9kZSI6ICJ3aW5kb3ciLA0KICAgICAgICAgICAgICAgICJ3aW5kb3ciOiAiVlJfUG9ncnV6Y2hpa19NYXAyOlVuaXR5V25kQ2xhc3M6VlJfUG9ncnV6Y2hpa19NYXAyLmV4ZSIsDQogICAgICAgICAgICAgICAgInByaW9yaXR5IjogMiwNCiAgICAgICAgICAgICAgICAiY2FwdHVyZV9jdXJzb3IiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAiYWxsb3dfdHJhbnNwYXJlbmN5IjogZmFsc2UsDQogICAgICAgICAgICAgICAgImNhcHR1cmVfb3ZlcmxheXMiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAiYW50aV9jaGVhdF9ob29rIjogdHJ1ZSwNCiAgICAgICAgICAgICAgICAibGltaXRfZnJhbWVyYXRlIjogZmFsc2UsDQogICAgICAgICAgICAgICAgImNhcHR1cmVfYXVkaW8iOiBmYWxzZQ0KICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICJtaXhlcnMiOiAwLA0KICAgICAgICAgICAgInN5bmMiOiAwLA0KICAgICAgICAgICAgImZsYWdzIjogMCwNCiAgICAgICAgICAgICJ2b2x1bWUiOiAxLjAsDQogICAgICAgICAgICAiYmFsYW5jZSI6IDAuNSwNCiAgICAgICAgICAgICJlbmFibGVkIjogdHJ1ZSwNCiAgICAgICAgICAgICJtdXRlZCI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tbXV0ZSI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tbXV0ZS1kZWxheSI6IDAsDQogICAgICAgICAgICAicHVzaC10by10YWxrIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by10YWxrLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJob3RrZXlzIjoge30sDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfbW9kZSI6IDAsDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfZmllbGRfb3JkZXIiOiAwLA0KICAgICAgICAgICAgIm1vbml0b3JpbmdfdHlwZSI6IDAsDQogICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9DQogICAgICAgIH0sDQogICAgICAgIHsNCiAgICAgICAgICAgICJwcmV2X3ZlciI6IDUzNzAwMTk4NiwNCiAgICAgICAgICAgICJuYW1lIjogItCX0LLRg9C6INGC0YDQtdC90LDQttGR0YDQsCIsDQogICAgICAgICAgICAidXVpZCI6ICJlZDBmMTBlMC03ZmIzLTRlZDAtODZkYi02N2UzZDk2OWNiM2QiLA0KICAgICAgICAgICAgImlkIjogIndhc2FwaV9wcm9jZXNzX291dHB1dF9jYXB0dXJlIiwNCiAgICAgICAgICAgICJ2ZXJzaW9uZWRfaWQiOiAid2FzYXBpX3Byb2Nlc3Nfb3V0cHV0X2NhcHR1cmUiLA0KICAgICAgICAgICAgInNldHRpbmdzIjogew0KICAgICAgICAgICAgICAgICJ3aW5kb3ciOiAiVlJfUG9ncnV6Y2hpa19NYXAyOlVuaXR5V25kQ2xhc3M6VlJfUG9ncnV6Y2hpa19NYXAyLmV4ZSIsDQogICAgICAgICAgICAgICAgInByaW9yaXR5IjogMg0KICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICJtaXhlcnMiOiAyNTUsDQogICAgICAgICAgICAic3luYyI6IDAsDQogICAgICAgICAgICAiZmxhZ3MiOiAwLA0KICAgICAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLA0KICAgICAgICAgICAgIm11dGVkIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGstZGVsYXkiOiAwLA0KICAgICAgICAgICAgImhvdGtleXMiOiB7DQogICAgICAgICAgICAgICAgImxpYm9icy5tdXRlIjogW10sDQogICAgICAgICAgICAgICAgImxpYm9icy51bm11dGUiOiBbXSwNCiAgICAgICAgICAgICAgICAibGlib2JzLnB1c2gtdG8tbXV0ZSI6IFtdLA0KICAgICAgICAgICAgICAgICJsaWJvYnMucHVzaC10by10YWxrIjogW10NCiAgICAgICAgICAgIH0sDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfbW9kZSI6IDAsDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfZmllbGRfb3JkZXIiOiAwLA0KICAgICAgICAgICAgIm1vbml0b3JpbmdfdHlwZSI6IDAsDQogICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9DQogICAgICAgIH0sDQogICAgICAgIHsNCiAgICAgICAgICAgICJwcmV2X3ZlciI6IDUzNzAwMTk4NiwNCiAgICAgICAgICAgICJuYW1lIjogItCi0LjRgtGAOiDQvdCw0LfQstCw0L3QuNC1IiwNCiAgICAgICAgICAgICJ1dWlkIjogImIyYWVkN2ZmLWI0YWQtNDIyNy1iMTM2LWIwMzE0ZjM2NmNhZiIsDQogICAgICAgICAgICAiaWQiOiAidGV4dF9nZGlwbHVzIiwNCiAgICAgICAgICAgICJ2ZXJzaW9uZWRfaWQiOiAidGV4dF9nZGlwbHVzX3YzIiwNCiAgICAgICAgICAgICJzZXR0aW5ncyI6IHsNCiAgICAgICAgICAgICAgICAidGV4dCI6ICJWUi3RgtGA0LXQvdCw0LbRkdGAIMKr0JLQuNC70L7Rh9C90YvQuSDQv9C+0LPRgNGD0LfRh9C40LrCuyDCtyDQmtCy0LDQvdGC0L7RgNC40YPQvCIsDQogICAgICAgICAgICAgICAgImZvbnQiOiB7DQogICAgICAgICAgICAgICAgICAgICJmYWNlIjogIlNlZ29lIFVJIiwNCiAgICAgICAgICAgICAgICAgICAgInNpemUiOiA0MCwNCiAgICAgICAgICAgICAgICAgICAgInN0eWxlIjogIkJvbGQiLA0KICAgICAgICAgICAgICAgICAgICAiZmxhZ3MiOiAxDQogICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAiY29sb3IiOiA0Mjk0OTY3Mjk1LA0KICAgICAgICAgICAgICAgICJvcGFjaXR5IjogMTAwLA0KICAgICAgICAgICAgICAgICJhbGlnbiI6ICJjZW50ZXIiLA0KICAgICAgICAgICAgICAgICJ2YWxpZ24iOiAiY2VudGVyIiwNCiAgICAgICAgICAgICAgICAiYmtfY29sb3IiOiA0Mjc4MTkwMDgwLA0KICAgICAgICAgICAgICAgICJia19vcGFjaXR5IjogNjANCiAgICAgICAgICAgIH0sDQogICAgICAgICAgICAibWl4ZXJzIjogMCwNCiAgICAgICAgICAgICJzeW5jIjogMCwNCiAgICAgICAgICAgICJmbGFncyI6IDAsDQogICAgICAgICAgICAidm9sdW1lIjogMS4wLA0KICAgICAgICAgICAgImJhbGFuY2UiOiAwLjUsDQogICAgICAgICAgICAiZW5hYmxlZCI6IHRydWUsDQogICAgICAgICAgICAibXV0ZWQiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLW11dGUiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLW11dGUtZGVsYXkiOiAwLA0KICAgICAgICAgICAgInB1c2gtdG8tdGFsayI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tdGFsay1kZWxheSI6IDAsDQogICAgICAgICAgICAiaG90a2V5cyI6IHt9LA0KICAgICAgICAgICAgImRlaW50ZXJsYWNlX21vZGUiOiAwLA0KICAgICAgICAgICAgImRlaW50ZXJsYWNlX2ZpZWxkX29yZGVyIjogMCwNCiAgICAgICAgICAgICJtb25pdG9yaW5nX3R5cGUiOiAwLA0KICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgICAgICB9LA0KICAgICAgICB7DQogICAgICAgICAgICAicHJldl92ZXIiOiA1MzcwMDE5ODYsDQogICAgICAgICAgICAibmFtZSI6ICLQpNC+0L0g0LfQsNGB0YLQsNCy0LrQuCIsDQogICAgICAgICAgICAidXVpZCI6ICI0YzRmYjdlMS0xMjg5LTRiYjktOGM5ZS0xODNlNTkxYWNjZDgiLA0KICAgICAgICAgICAgImlkIjogImNvbG9yX3NvdXJjZSIsDQogICAgICAgICAgICAidmVyc2lvbmVkX2lkIjogImNvbG9yX3NvdXJjZV92MyIsDQogICAgICAgICAgICAic2V0dGluZ3MiOiB7DQogICAgICAgICAgICAgICAgImNvbG9yIjogNDI4MDc1MjE0NSwNCiAgICAgICAgICAgICAgICAid2lkdGgiOiAxOTIwLA0KICAgICAgICAgICAgICAgICJoZWlnaHQiOiAxMDgwDQogICAgICAgICAgICB9LA0KICAgICAgICAgICAgIm1peGVycyI6IDAsDQogICAgICAgICAgICAic3luYyI6IDAsDQogICAgICAgICAgICAiZmxhZ3MiOiAwLA0KICAgICAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLA0KICAgICAgICAgICAgIm11dGVkIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGstZGVsYXkiOiAwLA0KICAgICAgICAgICAgImhvdGtleXMiOiB7fSwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9tb2RlIjogMCwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9maWVsZF9vcmRlciI6IDAsDQogICAgICAgICAgICAibW9uaXRvcmluZ190eXBlIjogMCwNCiAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgInByZXZfdmVyIjogNTM3MDAxOTg2LA0KICAgICAgICAgICAgIm5hbWUiOiAi0JfQsNGB0YLQsNCy0LrQsDog0LfQsNCz0L7Qu9C+0LLQvtC6IiwNCiAgICAgICAgICAgICJ1dWlkIjogImRmNGVlNTE4LThkYjgtNDc5Yy04YTJjLTA4M2ZiYTUxZjE0MiIsDQogICAgICAgICAgICAiaWQiOiAidGV4dF9nZGlwbHVzIiwNCiAgICAgICAgICAgICJ2ZXJzaW9uZWRfaWQiOiAidGV4dF9nZGlwbHVzX3YzIiwNCiAgICAgICAgICAgICJzZXR0aW5ncyI6IHsNCiAgICAgICAgICAgICAgICAidGV4dCI6ICLQodC60L7RgNC+INC90LDRh9C90ZHQvCIsDQogICAgICAgICAgICAgICAgImZvbnQiOiB7DQogICAgICAgICAgICAgICAgICAgICJmYWNlIjogIlNlZ29lIFVJIiwNCiAgICAgICAgICAgICAgICAgICAgInNpemUiOiAxMTAsDQogICAgICAgICAgICAgICAgICAgICJzdHlsZSI6ICJCb2xkIiwNCiAgICAgICAgICAgICAgICAgICAgImZsYWdzIjogMQ0KICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgImNvbG9yIjogNDI3ODIzNzE3MywNCiAgICAgICAgICAgICAgICAib3BhY2l0eSI6IDEwMCwNCiAgICAgICAgICAgICAgICAiYWxpZ24iOiAiY2VudGVyIiwNCiAgICAgICAgICAgICAgICAidmFsaWduIjogImNlbnRlciINCiAgICAgICAgICAgIH0sDQogICAgICAgICAgICAibWl4ZXJzIjogMCwNCiAgICAgICAgICAgICJzeW5jIjogMCwNCiAgICAgICAgICAgICJmbGFncyI6IDAsDQogICAgICAgICAgICAidm9sdW1lIjogMS4wLA0KICAgICAgICAgICAgImJhbGFuY2UiOiAwLjUsDQogICAgICAgICAgICAiZW5hYmxlZCI6IHRydWUsDQogICAgICAgICAgICAibXV0ZWQiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLW11dGUiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLW11dGUtZGVsYXkiOiAwLA0KICAgICAgICAgICAgInB1c2gtdG8tdGFsayI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tdGFsay1kZWxheSI6IDAsDQogICAgICAgICAgICAiaG90a2V5cyI6IHt9LA0KICAgICAgICAgICAgImRlaW50ZXJsYWNlX21vZGUiOiAwLA0KICAgICAgICAgICAgImRlaW50ZXJsYWNlX2ZpZWxkX29yZGVyIjogMCwNCiAgICAgICAgICAgICJtb25pdG9yaW5nX3R5cGUiOiAwLA0KICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgICAgICB9LA0KICAgICAgICB7DQogICAgICAgICAgICAicHJldl92ZXIiOiA1MzcwMDE5ODYsDQogICAgICAgICAgICAibmFtZSI6ICLQl9Cw0YHRgtCw0LLQutCwOiDQv9C+0LTQt9Cw0LPQvtC70L7QstC+0LoiLA0KICAgICAgICAgICAgInV1aWQiOiAiMGU4N2UyYTYtNTJiZS00MzM1LTgzYTQtNzhmNDUzYzQ4MTlhIiwNCiAgICAgICAgICAgICJpZCI6ICJ0ZXh0X2dkaXBsdXMiLA0KICAgICAgICAgICAgInZlcnNpb25lZF9pZCI6ICJ0ZXh0X2dkaXBsdXNfdjMiLA0KICAgICAgICAgICAgInNldHRpbmdzIjogew0KICAgICAgICAgICAgICAgICJ0ZXh0IjogIlZSLdGC0YDQtdC90LDQttGR0YAgwqvQktC40LvQvtGH0L3Ri9C5INC/0L7Qs9GA0YPQt9GH0LjQusK7IMK3INCa0LLQsNC90YLQvtGA0LjRg9C8IiwNCiAgICAgICAgICAgICAgICAiZm9udCI6IHsNCiAgICAgICAgICAgICAgICAgICAgImZhY2UiOiAiU2Vnb2UgVUkiLA0KICAgICAgICAgICAgICAgICAgICAic2l6ZSI6IDQ0LA0KICAgICAgICAgICAgICAgICAgICAic3R5bGUiOiAiUmVndWxhciIsDQogICAgICAgICAgICAgICAgICAgICJmbGFncyI6IDANCiAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICJjb2xvciI6IDQyOTM2NTA0MDUsDQogICAgICAgICAgICAgICAgIm9wYWNpdHkiOiAxMDAsDQogICAgICAgICAgICAgICAgImFsaWduIjogImNlbnRlciIsDQogICAgICAgICAgICAgICAgInZhbGlnbiI6ICJjZW50ZXIiDQogICAgICAgICAgICB9LA0KICAgICAgICAgICAgIm1peGVycyI6IDAsDQogICAgICAgICAgICAic3luYyI6IDAsDQogICAgICAgICAgICAiZmxhZ3MiOiAwLA0KICAgICAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLA0KICAgICAgICAgICAgIm11dGVkIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGstZGVsYXkiOiAwLA0KICAgICAgICAgICAgImhvdGtleXMiOiB7fSwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9tb2RlIjogMCwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9maWVsZF9vcmRlciI6IDAsDQogICAgICAgICAgICAibW9uaXRvcmluZ190eXBlIjogMCwNCiAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgInByZXZfdmVyIjogNTM3MDAxOTg2LA0KICAgICAgICAgICAgIm5hbWUiOiAiMS4gTElWIOKAlCDRgdC80LXRiNCw0L3QvdCw0Y8g0YDQtdCw0LvRjNC90L7RgdGC0YwiLA0KICAgICAgICAgICAgInV1aWQiOiAiZTM2ODk1ZDctOWU2OS00YjFlLWIzM2ItNjgyODNlNTI2NGI0IiwNCiAgICAgICAgICAgICJpZCI6ICJzY2VuZSIsDQogICAgICAgICAgICAidmVyc2lvbmVkX2lkIjogInNjZW5lIiwNCiAgICAgICAgICAgICJzZXR0aW5ncyI6IHsNCiAgICAgICAgICAgICAgICAiY3VzdG9tX3NpemUiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAiaWRfY291bnRlciI6IDMsDQogICAgICAgICAgICAgICAgIml0ZW1zIjogWw0KICAgICAgICAgICAgICAgICAgICB7DQogICAgICAgICAgICAgICAgICAgICAgICAibmFtZSI6ICJMSVYgT3V0cHV0ICjRgdC80LXRiNCw0L3QvdCw0Y8g0YDQtdCw0LvRjNC90L7RgdGC0YwpIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzb3VyY2VfdXVpZCI6ICI1NTE5Yzg1Mi1lMDYxLTRlZWUtODVhMC0zOTEzMzI2MTA2ZTMiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInZpc2libGUiOiB0cnVlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImxvY2tlZCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgInJvdCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJhbGlnbiI6IDUsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX3R5cGUiOiAyLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc19hbGlnbiI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2Nyb3AiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2xlZnQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfdG9wIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX3JpZ2h0IjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2JvdHRvbSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiaWQiOiAxLA0KICAgICAgICAgICAgICAgICAgICAgICAgImdyb3VwX2l0ZW1fYmFja3VwIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicG9zIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMS4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMS4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kcyI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDE5MjAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDEwODAuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZV9maWx0ZXIiOiAiZGlzYWJsZSIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfbWV0aG9kIjogImRlZmF1bHQiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX3R5cGUiOiAibm9ybWFsIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzaG93X3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJoaWRlX3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgew0KICAgICAgICAgICAgICAgICAgICAgICAgIm5hbWUiOiAi0KLQuNGC0YA6INC90LDQt9Cy0LDQvdC40LUiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNvdXJjZV91dWlkIjogImIyYWVkN2ZmLWI0YWQtNDIyNy1iMTM2LWIwMzE0ZjM2NmNhZiIsDQogICAgICAgICAgICAgICAgICAgICAgICAidmlzaWJsZSI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImxvY2tlZCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgInJvdCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJhbGlnbiI6IDksDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX3R5cGUiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc19hbGlnbiI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2Nyb3AiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2xlZnQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfdG9wIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX3JpZ2h0IjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2JvdHRvbSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiaWQiOiAyLA0KICAgICAgICAgICAgICAgICAgICAgICAgImdyb3VwX2l0ZW1fYmFja3VwIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicG9zIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMzIuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDEwNDguMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZSI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDEuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDEuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHMiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGVfZmlsdGVyIjogImRpc2FibGUiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX21ldGhvZCI6ICJkZWZhdWx0IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF90eXBlIjogIm5vcm1hbCIsDQogICAgICAgICAgICAgICAgICAgICAgICAic2hvd190cmFuc2l0aW9uIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJkdXJhdGlvbiI6IDANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiaGlkZV90cmFuc2l0aW9uIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJkdXJhdGlvbiI6IDANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9DQogICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICJuYW1lIjogItCX0LLRg9C6INGC0YDQtdC90LDQttGR0YDQsCIsDQogICAgICAgICAgICAgICAgICAgICAgICAic291cmNlX3V1aWQiOiAiZWQwZjEwZTAtN2ZiMy00ZWQwLTg2ZGItNjdlM2Q5NjljYjNkIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJ2aXNpYmxlIjogdHJ1ZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJsb2NrZWQiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJyb3QiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYWxpZ24iOiA1LA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc190eXBlIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfYWxpZ24iOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc19jcm9wIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF9sZWZ0IjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX3RvcCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF9yaWdodCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF9ib3R0b20iOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImlkIjogMywNCiAgICAgICAgICAgICAgICAgICAgICAgICJncm91cF9pdGVtX2JhY2t1cCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgInBvcyI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDAuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZSI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDEuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDEuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHMiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGVfZmlsdGVyIjogImRpc2FibGUiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX21ldGhvZCI6ICJkZWZhdWx0IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF90eXBlIjogIm5vcm1hbCIsDQogICAgICAgICAgICAgICAgICAgICAgICAic2hvd190cmFuc2l0aW9uIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJkdXJhdGlvbiI6IDANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiaGlkZV90cmFuc2l0aW9uIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJkdXJhdGlvbiI6IDANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9DQogICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICBdDQogICAgICAgICAgICB9LA0KICAgICAgICAgICAgIm1peGVycyI6IDAsDQogICAgICAgICAgICAic3luYyI6IDAsDQogICAgICAgICAgICAiZmxhZ3MiOiAwLA0KICAgICAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLA0KICAgICAgICAgICAgIm11dGVkIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGstZGVsYXkiOiAwLA0KICAgICAgICAgICAgImhvdGtleXMiOiB7DQogICAgICAgICAgICAgICAgIk9CU0Jhc2ljLlNlbGVjdFNjZW5lIjogW10NCiAgICAgICAgICAgIH0sDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfbW9kZSI6IDAsDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfZmllbGRfb3JkZXIiOiAwLA0KICAgICAgICAgICAgIm1vbml0b3JpbmdfdHlwZSI6IDAsDQogICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9LA0KICAgICAgICAgICAgImNhbnZhc191dWlkIjogIjZjNjk2MjZmLTYyNzMtNGMwMC05ZDg4LWM1MTM2ZDYxNjk2ZSINCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgInByZXZfdmVyIjogNTM3MDAxOTg2LA0KICAgICAgICAgICAgIm5hbWUiOiAiMi4g0JLQuNC0INC40Lcg0YjQu9C10LzQsCIsDQogICAgICAgICAgICAidXVpZCI6ICI0MWU0Yzk3My01MWNhLTRhOTEtODgzNC0wYjBkYTk0YzBhMjEiLA0KICAgICAgICAgICAgImlkIjogInNjZW5lIiwNCiAgICAgICAgICAgICJ2ZXJzaW9uZWRfaWQiOiAic2NlbmUiLA0KICAgICAgICAgICAgInNldHRpbmdzIjogew0KICAgICAgICAgICAgICAgICJjdXN0b21fc2l6ZSI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICJpZF9jb3VudGVyIjogMiwNCiAgICAgICAgICAgICAgICAiaXRlbXMiOiBbDQogICAgICAgICAgICAgICAgICAgIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICJuYW1lIjogItCS0LjQtCDQuNC3INGI0LvQtdC80LAgKNC+0LrQvdC+INGC0YDQtdC90LDQttGR0YDQsCkiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNvdXJjZV91dWlkIjogImE4ZTA0NmYwLTgyMjEtNDBlOC1iNWNjLTNkY2VhNTVkNDc1YyIsDQogICAgICAgICAgICAgICAgICAgICAgICAidmlzaWJsZSI6IHRydWUsDQogICAgICAgICAgICAgICAgICAgICAgICAibG9ja2VkIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicm90IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgImFsaWduIjogNSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfdHlwZSI6IDIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2FsaWduIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfY3JvcCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfbGVmdCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF90b3AiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfcmlnaHQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfYm90dG9tIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJpZCI6IDEsDQogICAgICAgICAgICAgICAgICAgICAgICAiZ3JvdXBfaXRlbV9iYWNrdXAiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwb3MiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGUiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAxLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAxLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMTkyMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMTA4MC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlX2ZpbHRlciI6ICJkaXNhYmxlIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF9tZXRob2QiOiAiZGVmYXVsdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfdHlwZSI6ICJub3JtYWwiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNob3dfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImhpZGVfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICB7DQogICAgICAgICAgICAgICAgICAgICAgICAibmFtZSI6ICLQl9Cy0YPQuiDRgtGA0LXQvdCw0LbRkdGA0LAiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNvdXJjZV91dWlkIjogImVkMGYxMGUwLTdmYjMtNGVkMC04NmRiLTY3ZTNkOTY5Y2IzZCIsDQogICAgICAgICAgICAgICAgICAgICAgICAidmlzaWJsZSI6IHRydWUsDQogICAgICAgICAgICAgICAgICAgICAgICAibG9ja2VkIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicm90IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgImFsaWduIjogNSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfdHlwZSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2FsaWduIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfY3JvcCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfbGVmdCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF90b3AiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfcmlnaHQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfYm90dG9tIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJpZCI6IDIsDQogICAgICAgICAgICAgICAgICAgICAgICAiZ3JvdXBfaXRlbV9iYWNrdXAiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwb3MiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGUiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAxLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAxLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlX2ZpbHRlciI6ICJkaXNhYmxlIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF9tZXRob2QiOiAiZGVmYXVsdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfdHlwZSI6ICJub3JtYWwiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNob3dfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImhpZGVfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgXQ0KICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICJtaXhlcnMiOiAwLA0KICAgICAgICAgICAgInN5bmMiOiAwLA0KICAgICAgICAgICAgImZsYWdzIjogMCwNCiAgICAgICAgICAgICJ2b2x1bWUiOiAxLjAsDQogICAgICAgICAgICAiYmFsYW5jZSI6IDAuNSwNCiAgICAgICAgICAgICJlbmFibGVkIjogdHJ1ZSwNCiAgICAgICAgICAgICJtdXRlZCI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tbXV0ZSI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tbXV0ZS1kZWxheSI6IDAsDQogICAgICAgICAgICAicHVzaC10by10YWxrIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by10YWxrLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJob3RrZXlzIjogew0KICAgICAgICAgICAgICAgICJPQlNCYXNpYy5TZWxlY3RTY2VuZSI6IFtdDQogICAgICAgICAgICB9LA0KICAgICAgICAgICAgImRlaW50ZXJsYWNlX21vZGUiOiAwLA0KICAgICAgICAgICAgImRlaW50ZXJsYWNlX2ZpZWxkX29yZGVyIjogMCwNCiAgICAgICAgICAgICJtb25pdG9yaW5nX3R5cGUiOiAwLA0KICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fSwNCiAgICAgICAgICAgICJjYW52YXNfdXVpZCI6ICI2YzY5NjI2Zi02MjczLTRjMDAtOWQ4OC1jNTEzNmQ2MTY5NmUiDQogICAgICAgIH0sDQogICAgICAgIHsNCiAgICAgICAgICAgICJwcmV2X3ZlciI6IDUzNzAwMTk4NiwNCiAgICAgICAgICAgICJuYW1lIjogIjMuIE1SICsg0LLQuNC0INC40Lcg0YjQu9C10LzQsCIsDQogICAgICAgICAgICAidXVpZCI6ICI4MmYyYjQxZC02ZWVhLTRlMDItYjJjZi03ZDQ2OTVhNWI5YjgiLA0KICAgICAgICAgICAgImlkIjogInNjZW5lIiwNCiAgICAgICAgICAgICJ2ZXJzaW9uZWRfaWQiOiAic2NlbmUiLA0KICAgICAgICAgICAgInNldHRpbmdzIjogew0KICAgICAgICAgICAgICAgICJjdXN0b21fc2l6ZSI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICJpZF9jb3VudGVyIjogMywNCiAgICAgICAgICAgICAgICAiaXRlbXMiOiBbDQogICAgICAgICAgICAgICAgICAgIHsNCiAgICAgICAgICAgICAgICAgICAgICAgICJuYW1lIjogIkxJViBPdXRwdXQgKNGB0LzQtdGI0LDQvdC90LDRjyDRgNC10LDQu9GM0L3QvtGB0YLRjCkiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNvdXJjZV91dWlkIjogIjU1MTljODUyLWUwNjEtNGVlZS04NWEwLTM5MTMzMjYxMDZlMyIsDQogICAgICAgICAgICAgICAgICAgICAgICAidmlzaWJsZSI6IHRydWUsDQogICAgICAgICAgICAgICAgICAgICAgICAibG9ja2VkIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicm90IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgImFsaWduIjogNSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfdHlwZSI6IDIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2FsaWduIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfY3JvcCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfbGVmdCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF90b3AiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfcmlnaHQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfYm90dG9tIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJpZCI6IDEsDQogICAgICAgICAgICAgICAgICAgICAgICAiZ3JvdXBfaXRlbV9iYWNrdXAiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwb3MiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGUiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAxLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAxLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMTkyMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMTA4MC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlX2ZpbHRlciI6ICJkaXNhYmxlIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF9tZXRob2QiOiAiZGVmYXVsdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfdHlwZSI6ICJub3JtYWwiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNob3dfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImhpZGVfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICB7DQogICAgICAgICAgICAgICAgICAgICAgICAibmFtZSI6ICLQktC40LQg0LjQtyDRiNC70LXQvNCwICjQvtC60L3QviDRgtGA0LXQvdCw0LbRkdGA0LApIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzb3VyY2VfdXVpZCI6ICJhOGUwNDZmMC04MjIxLTQwZTgtYjVjYy0zZGNlYTU1ZDQ3NWMiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInZpc2libGUiOiB0cnVlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImxvY2tlZCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgInJvdCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJhbGlnbiI6IDUsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX3R5cGUiOiAyLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc19hbGlnbiI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2Nyb3AiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2xlZnQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfdG9wIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX3JpZ2h0IjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2JvdHRvbSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiaWQiOiAyLA0KICAgICAgICAgICAgICAgICAgICAgICAgImdyb3VwX2l0ZW1fYmFja3VwIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicG9zIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMTQwOC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogNzc4LjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGUiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAxLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAxLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogNDgwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAyNzAuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZV9maWx0ZXIiOiAiZGlzYWJsZSIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfbWV0aG9kIjogImRlZmF1bHQiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX3R5cGUiOiAibm9ybWFsIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzaG93X3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJoaWRlX3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgew0KICAgICAgICAgICAgICAgICAgICAgICAgIm5hbWUiOiAi0JfQstGD0Log0YLRgNC10L3QsNC20ZHRgNCwIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzb3VyY2VfdXVpZCI6ICJlZDBmMTBlMC03ZmIzLTRlZDAtODZkYi02N2UzZDk2OWNiM2QiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInZpc2libGUiOiB0cnVlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImxvY2tlZCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgInJvdCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJhbGlnbiI6IDUsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX3R5cGUiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc19hbGlnbiI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2Nyb3AiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2xlZnQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfdG9wIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX3JpZ2h0IjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2JvdHRvbSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiaWQiOiAzLA0KICAgICAgICAgICAgICAgICAgICAgICAgImdyb3VwX2l0ZW1fYmFja3VwIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicG9zIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMS4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMS4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kcyI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDAuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZV9maWx0ZXIiOiAiZGlzYWJsZSIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfbWV0aG9kIjogImRlZmF1bHQiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX3R5cGUiOiAibm9ybWFsIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzaG93X3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJoaWRlX3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgIF0NCiAgICAgICAgICAgIH0sDQogICAgICAgICAgICAibWl4ZXJzIjogMCwNCiAgICAgICAgICAgICJzeW5jIjogMCwNCiAgICAgICAgICAgICJmbGFncyI6IDAsDQogICAgICAgICAgICAidm9sdW1lIjogMS4wLA0KICAgICAgICAgICAgImJhbGFuY2UiOiAwLjUsDQogICAgICAgICAgICAiZW5hYmxlZCI6IHRydWUsDQogICAgICAgICAgICAibXV0ZWQiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLW11dGUiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLW11dGUtZGVsYXkiOiAwLA0KICAgICAgICAgICAgInB1c2gtdG8tdGFsayI6IGZhbHNlLA0KICAgICAgICAgICAgInB1c2gtdG8tdGFsay1kZWxheSI6IDAsDQogICAgICAgICAgICAiaG90a2V5cyI6IHsNCiAgICAgICAgICAgICAgICAiT0JTQmFzaWMuU2VsZWN0U2NlbmUiOiBbXQ0KICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9tb2RlIjogMCwNCiAgICAgICAgICAgICJkZWludGVybGFjZV9maWVsZF9vcmRlciI6IDAsDQogICAgICAgICAgICAibW9uaXRvcmluZ190eXBlIjogMCwNCiAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30sDQogICAgICAgICAgICAiY2FudmFzX3V1aWQiOiAiNmM2OTYyNmYtNjI3My00YzAwLTlkODgtYzUxMzZkNjE2OTZlIg0KICAgICAgICB9LA0KICAgICAgICB7DQogICAgICAgICAgICAicHJldl92ZXIiOiA1MzcwMDE5ODYsDQogICAgICAgICAgICAibmFtZSI6ICI0LiDQl9Cw0YHRgtCw0LLQutCwIiwNCiAgICAgICAgICAgICJ1dWlkIjogImE0MDkwYzRhLTY2YTktNDcyZS1iNzg1LTgwNmQ0NDk0ZmFhOCIsDQogICAgICAgICAgICAiaWQiOiAic2NlbmUiLA0KICAgICAgICAgICAgInZlcnNpb25lZF9pZCI6ICJzY2VuZSIsDQogICAgICAgICAgICAic2V0dGluZ3MiOiB7DQogICAgICAgICAgICAgICAgImN1c3RvbV9zaXplIjogZmFsc2UsDQogICAgICAgICAgICAgICAgImlkX2NvdW50ZXIiOiAzLA0KICAgICAgICAgICAgICAgICJpdGVtcyI6IFsNCiAgICAgICAgICAgICAgICAgICAgew0KICAgICAgICAgICAgICAgICAgICAgICAgIm5hbWUiOiAi0KTQvtC9INC30LDRgdGC0LDQstC60LgiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNvdXJjZV91dWlkIjogIjRjNGZiN2UxLTEyODktNGJiOS04YzllLTE4M2U1OTFhY2NkOCIsDQogICAgICAgICAgICAgICAgICAgICAgICAidmlzaWJsZSI6IHRydWUsDQogICAgICAgICAgICAgICAgICAgICAgICAibG9ja2VkIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicm90IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgImFsaWduIjogNSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfdHlwZSI6IDIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2FsaWduIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfY3JvcCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfbGVmdCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF90b3AiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfcmlnaHQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfYm90dG9tIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJpZCI6IDEsDQogICAgICAgICAgICAgICAgICAgICAgICAiZ3JvdXBfaXRlbV9iYWNrdXAiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwb3MiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGUiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAxLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAxLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMTkyMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMTA4MC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlX2ZpbHRlciI6ICJkaXNhYmxlIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF9tZXRob2QiOiAiZGVmYXVsdCIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfdHlwZSI6ICJub3JtYWwiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNob3dfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImhpZGVfdHJhbnNpdGlvbiI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAiZHVyYXRpb24iOiAwDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInByaXZhdGVfc2V0dGluZ3MiOiB7fQ0KICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICB7DQogICAgICAgICAgICAgICAgICAgICAgICAibmFtZSI6ICLQl9Cw0YHRgtCw0LLQutCwOiDQt9Cw0LPQvtC70L7QstC+0LoiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInNvdXJjZV91dWlkIjogImRmNGVlNTE4LThkYjgtNDc5Yy04YTJjLTA4M2ZiYTUxZjE0MiIsDQogICAgICAgICAgICAgICAgICAgICAgICAidmlzaWJsZSI6IHRydWUsDQogICAgICAgICAgICAgICAgICAgICAgICAibG9ja2VkIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicm90IjogMC4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgImFsaWduIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfdHlwZSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2FsaWduIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHNfY3JvcCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfbGVmdCI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiY3JvcF90b3AiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfcmlnaHQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfYm90dG9tIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJpZCI6IDIsDQogICAgICAgICAgICAgICAgICAgICAgICAiZ3JvdXBfaXRlbV9iYWNrdXAiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwb3MiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiA5NjAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDUwMC4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgInNjYWxlIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogMS4wLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ5IjogMS4wDQogICAgICAgICAgICAgICAgICAgICAgICB9LA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kcyI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDAuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZV9maWx0ZXIiOiAiZGlzYWJsZSIsDQogICAgICAgICAgICAgICAgICAgICAgICAiYmxlbmRfbWV0aG9kIjogImRlZmF1bHQiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX3R5cGUiOiAibm9ybWFsIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzaG93X3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJoaWRlX3RyYW5zaXRpb24iOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgImR1cmF0aW9uIjogMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJwcml2YXRlX3NldHRpbmdzIjoge30NCiAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgew0KICAgICAgICAgICAgICAgICAgICAgICAgIm5hbWUiOiAi0JfQsNGB0YLQsNCy0LrQsDog0L/QvtC00LfQsNCz0L7Qu9C+0LLQvtC6IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzb3VyY2VfdXVpZCI6ICIwZTg3ZTJhNi01MmJlLTQzMzUtODNhNC03OGY0NTNjNDgxOWEiLA0KICAgICAgICAgICAgICAgICAgICAgICAgInZpc2libGUiOiB0cnVlLA0KICAgICAgICAgICAgICAgICAgICAgICAgImxvY2tlZCI6IGZhbHNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgInJvdCI6IDAuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJhbGlnbiI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX3R5cGUiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJvdW5kc19hbGlnbiI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiYm91bmRzX2Nyb3AiOiBmYWxzZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2xlZnQiOiAwLA0KICAgICAgICAgICAgICAgICAgICAgICAgImNyb3BfdG9wIjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX3JpZ2h0IjogMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICJjcm9wX2JvdHRvbSI6IDAsDQogICAgICAgICAgICAgICAgICAgICAgICAiaWQiOiAzLA0KICAgICAgICAgICAgICAgICAgICAgICAgImdyb3VwX2l0ZW1fYmFja3VwIjogZmFsc2UsDQogICAgICAgICAgICAgICAgICAgICAgICAicG9zIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ4IjogOTYwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiA2MTAuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJzY2FsZSI6IHsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieCI6IDEuMCwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAieSI6IDEuMA0KICAgICAgICAgICAgICAgICAgICAgICAgfSwNCiAgICAgICAgICAgICAgICAgICAgICAgICJib3VuZHMiOiB7DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgIngiOiAwLjAsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgInkiOiAwLjANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAic2NhbGVfZmlsdGVyIjogImRpc2FibGUiLA0KICAgICAgICAgICAgICAgICAgICAgICAgImJsZW5kX21ldGhvZCI6ICJkZWZhdWx0IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICJibGVuZF90eXBlIjogIm5vcm1hbCIsDQogICAgICAgICAgICAgICAgICAgICAgICAic2hvd190cmFuc2l0aW9uIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJkdXJhdGlvbiI6IDANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAiaGlkZV90cmFuc2l0aW9uIjogew0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICJkdXJhdGlvbiI6IDANCiAgICAgICAgICAgICAgICAgICAgICAgIH0sDQogICAgICAgICAgICAgICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9DQogICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICBdDQogICAgICAgICAgICB9LA0KICAgICAgICAgICAgIm1peGVycyI6IDAsDQogICAgICAgICAgICAic3luYyI6IDAsDQogICAgICAgICAgICAiZmxhZ3MiOiAwLA0KICAgICAgICAgICAgInZvbHVtZSI6IDEuMCwNCiAgICAgICAgICAgICJiYWxhbmNlIjogMC41LA0KICAgICAgICAgICAgImVuYWJsZWQiOiB0cnVlLA0KICAgICAgICAgICAgIm11dGVkIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlIjogZmFsc2UsDQogICAgICAgICAgICAicHVzaC10by1tdXRlLWRlbGF5IjogMCwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGsiOiBmYWxzZSwNCiAgICAgICAgICAgICJwdXNoLXRvLXRhbGstZGVsYXkiOiAwLA0KICAgICAgICAgICAgImhvdGtleXMiOiB7DQogICAgICAgICAgICAgICAgIk9CU0Jhc2ljLlNlbGVjdFNjZW5lIjogW10NCiAgICAgICAgICAgIH0sDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfbW9kZSI6IDAsDQogICAgICAgICAgICAiZGVpbnRlcmxhY2VfZmllbGRfb3JkZXIiOiAwLA0KICAgICAgICAgICAgIm1vbml0b3JpbmdfdHlwZSI6IDAsDQogICAgICAgICAgICAicHJpdmF0ZV9zZXR0aW5ncyI6IHt9LA0KICAgICAgICAgICAgImNhbnZhc191dWlkIjogIjZjNjk2MjZmLTYyNzMtNGMwMC05ZDg4LWM1MTM2ZDYxNjk2ZSINCiAgICAgICAgfQ0KICAgIF0sDQogICAgImdyb3VwcyI6IFtdLA0KICAgICJzY2VuZV9vcmRlciI6IFsNCiAgICAgICAgew0KICAgICAgICAgICAgIm5hbWUiOiAiMS4gTElWIOKAlCDRgdC80LXRiNCw0L3QvdCw0Y8g0YDQtdCw0LvRjNC90L7RgdGC0YwiDQogICAgICAgIH0sDQogICAgICAgIHsNCiAgICAgICAgICAgICJuYW1lIjogIjIuINCS0LjQtCDQuNC3INGI0LvQtdC80LAiDQogICAgICAgIH0sDQogICAgICAgIHsNCiAgICAgICAgICAgICJuYW1lIjogIjMuIE1SICsg0LLQuNC0INC40Lcg0YjQu9C10LzQsCINCiAgICAgICAgfSwNCiAgICAgICAgew0KICAgICAgICAgICAgIm5hbWUiOiAiNC4g0JfQsNGB0YLQsNCy0LrQsCINCiAgICAgICAgfQ0KICAgIF0sDQogICAgImN1cnJlbnRfc2NlbmUiOiAiMS4gTElWIOKAlCDRgdC80LXRiNCw0L3QvdCw0Y8g0YDQtdCw0LvRjNC90L7RgdGC0YwiLA0KICAgICJjdXJyZW50X3Byb2dyYW1fc2NlbmUiOiAiMS4gTElWIOKAlCDRgdC80LXRiNCw0L3QvdCw0Y8g0YDQtdCw0LvRjNC90L7RgdGC0YwiLA0KICAgICJjYW52YXNlcyI6IFtdLA0KICAgICJjdXJyZW50X3RyYW5zaXRpb24iOiAi0JfQsNGC0YPRhdCw0L3QuNC1IiwNCiAgICAidHJhbnNpdGlvbl9kdXJhdGlvbiI6IDMwMCwNCiAgICAidHJhbnNpdGlvbnMiOiBbXSwNCiAgICAicXVpY2tfdHJhbnNpdGlvbnMiOiBbXSwNCiAgICAic2F2ZWRfcHJvamVjdG9ycyI6IFtdLA0KICAgICJwcmV2aWV3X2xvY2tlZCI6IGZhbHNlLA0KICAgICJzY2FsaW5nX2VuYWJsZWQiOiBmYWxzZSwNCiAgICAic2NhbGluZ19sZXZlbCI6IDAsDQogICAgInNjYWxpbmdfb2ZmX3giOiAwLjAsDQogICAgInNjYWxpbmdfb2ZmX3kiOiAwLjAsDQogICAgIm1vZHVsZXMiOiB7fSwNCiAgICAidmVyc2lvbiI6IDENCn0=" },
+    "dl-profile": { name: "OBS_Profile_Kvantorium_LIV.zip", b64: "UEsDBBQAAAAIAP0wOV07whRsZAEAACECAAAYAAAAS3ZhbnRvcml1bV9MSVYvYmFzaWMuaW5pbVDLTsJAFN036T+46bJJi4iwmAUUMCaCSEkjIYZc2hs6YR7NdGqCK6N/4VcYVy7Ubyh/5NACG11MMufcO+cxiysUqIA92NYYOJLyrfwo38vv3Uv5s3suP3ev5dfZzXVkW7a1iGiC0mz2IMfgnvidhncAc+J7bQNuC50V+jQ7wON0OAln2wxJfQ0k51KQc4PCGBhWoxWNC3NsK5BMqqFUHDQZR37jwIQZxEguvc4BT0GskUxAaQqsCll7mpQjmSAJKc8YGj/KUJiCtaKmYk0mcq2Kpzilm6UpuHSCYD53ndHIdfr9pZOmrsO56+R5pVrrnLRDrRD4QMTGQxHxiMJEnmL8l7krgFG9JSEHxiqmjtAg6XalaLLkWdO2oh7VCjSSlueZ/+geod8yaBwNxsFEYY7mVXZxdO8WCZVHQ4Da7l9ypiDe5MSvmlQb+wqwbzTduzTblWuQghDIQtRFRkKNCqVt/QJQSwECFAAUAAAACAD9MDldO8IUbGQBAAAhAgAAGAAAAAAAAAAAAAAAtoEAAAAAS3ZhbnRvcml1bV9MSVYvYmFzaWMuaW5pUEsFBgAAAAABAAEARgAAAJoBAAAAAA==" }
+  };
+  var statusEl = document.getElementById("dl-status");
+  var dlPromise = (window.claude && window.claude.use)
+    ? window.claude.use("downloads").catch(function () { return null; })
+    : Promise.resolve(null);
+
+  function bytes(b64) {
+    var s = atob(b64), u = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) u[i] = s.charCodeAt(i);
+    return u;
+  }
+  function unavailable() {
+    Object.keys(FILES).forEach(function (id) { document.getElementById(id).disabled = true; });
+    statusEl.textContent = "Скачивание с этой страницы недоступно. Возьмите файлы из репозитория: Docs/LIV_OBS/.";
+  }
+  dlPromise.then(function (d) { if (!d) unavailable(); });
+
+  Object.keys(FILES).forEach(function (id) {
+    document.getElementById(id).addEventListener("click", async function () {
+      var f = FILES[id];
+      var d = await dlPromise;
+      if (!d) { unavailable(); return; }
+      statusEl.textContent = "Подтвердите сохранение файла " + f.name + ".";
+      try {
+        var r = await d.save({ filename: f.name, data: bytes(f.b64) });
+        statusEl.textContent = r && r.status === "delivered" ? "Файл передан." : "Файл " + f.name + " сохранён.";
+      } catch (e) {
+        var code = e && e.code;
+        if (code === "declined") statusEl.textContent = "Сохранение отменено.";
+        else if (code === "rate_limited") statusEl.textContent = "Уже открыто окно сохранения. Завершите его и попробуйте снова.";
+        else unavailable();
+      }
+    });
+  });
+
+  var KEY = "liv-obs-checklist";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("#checklist input"));
+  var countEl = document.getElementById("check-count");
+  function load() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+  function save(state) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function update() {
+    var n = boxes.filter(function (b) { return b.checked; }).length;
+    countEl.textContent = n + " из " + boxes.length;
+  }
+  var state = load();
+  boxes.forEach(function (b) {
+    b.checked = !!state[b.id];
+    b.addEventListener("change", function () { state[b.id] = b.checked; save(state); update(); });
+  });
+  document.getElementById("check-reset").addEventListener("click", function () {
+    state = {}; save(state); boxes.forEach(function (b) { b.checked = false; }); update();
+  });
+  update();
+})();
+</script>
