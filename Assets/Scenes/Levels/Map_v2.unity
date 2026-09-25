@@ -727,9 +727,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2062500029793352684, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 552261181}
     - targetCorrespondingSourceObject: {fileID: 6127416181645078826, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -752,52 +749,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
---- !u!1 &552261178 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2062500029793352684, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
-  m_PrefabInstance: {fileID: 552261177}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &552261179 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 5035672590955626586, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
-  m_PrefabInstance: {fileID: 552261177}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &552261180 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5923688269409196291, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}
-  m_PrefabInstance: {fileID: 552261177}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &552261181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552261178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419ad76f2ffc722478bc67f61f9c32e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: LIV::LIV.SDK.Unity.LIV
-  _stage: {fileID: 552261180}
-  _stageTransform: {fileID: 0}
-  _HMDCamera: {fileID: 552261179}
-  _MRCameraPrefab: {fileID: 0}
-  _disableStandardAssets: 0
-  _spectatorLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  _passthroughLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  _excludeBehaviours:
-  - AudioListener
-  - Collider
-  - SteamVR_Camera
-  - SteamVR_Fade
-  - SteamVR_ExternalCamera
-  _fixPostEffectsAlpha: 1
-  _overrideAlphaFromDepthBuffer: 0
 --- !u!114 &2060118485 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2956880050737125642, guid: e1e22e62137106b4d93c6231fcc6a839, type: 3}

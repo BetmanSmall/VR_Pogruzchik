@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 6520291404937146767}
   - component: {fileID: 5826056641483426609}
   - component: {fileID: 5033801203051696737}
+  - component: {fileID: -8571059349772599999}
   m_Layer: 2
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -959,6 +960,37 @@ MonoBehaviour:
   m_AimAssistRequiredSpeed: 0.25
   m_AimAssistPercent: 0.8
   m_AimAssistMaxSpeedPercent: 10
+--- !u!114 &-8571059349772599999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717954561962503725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419ad76f2ffc722478bc67f61f9c32e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LIV::LIV.SDK.Unity.LIV
+  _stage: {fileID: 1717954561962503726}
+  _stageTransform: {fileID: 0}
+  _HMDCamera: {fileID: 1767192439}
+  _MRCameraPrefab: {fileID: 0}
+  _disableStandardAssets: 0
+  _spectatorLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _passthroughLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _excludeBehaviours:
+  - AudioListener
+  - Collider
+  - SteamVR_Camera
+  - SteamVR_Fade
+  - SteamVR_ExternalCamera
+  _fixPostEffectsAlpha: 1
+  _overrideAlphaFromDepthBuffer: 0
 --- !u!1 &1787516059220952802
 GameObject:
   m_ObjectHideFlags: 0
@@ -2472,7 +2504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2106445073030012882, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_Size
-      value: 0
+      value: 0.00000050862633
       objectReference: {fileID: 0}
     - target: {fileID: 2106445073030012882, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_Value
@@ -2480,7 +2512,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2106450765182819858, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9999848
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286876200755710834, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286876200755710834, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286876200755710834, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286876200755710834, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286876200755710834, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286876200755710834, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2287009500365990220, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2502,6 +2558,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2287086323449751096, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2287121276892804170, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2511,8 +2571,32 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2287157547903779988, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000015258789
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287157547903779988, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 199.99994
+      value: 199.99997
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287654513073659168, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287654513073659168, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287654513073659168, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287654513073659168, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287654513073659168, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2287682638690100366, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2542,6 +2626,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'VR_Canvas_Debug_Dev_Admin '
       objectReference: {fileID: 0}
+    - target: {fileID: 7213842021386225129, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_Size
+      value: 0.9999966
+      objectReference: {fileID: 0}
     - target: {fileID: 7392397321911310341, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2553,6 +2641,10 @@ PrefabInstance:
     - target: {fileID: 7392571599194188029, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7392571599194188029, guid: 7842bf732956571418acc08cf22cf36c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000061035156
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
