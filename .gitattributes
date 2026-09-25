@@ -1,0 +1,94 @@
+# Git attributes for the Unity project.
+# Text files are stored with LF in the repository.
+
+* text=auto
+
+# --- Code -------------------------------------------------------------------
+*.cs      text diff=csharp
+*.shader  text
+*.hlsl    text
+*.cginc   text
+*.compute text
+*.uxml    text
+*.uss     text
+
+# --- Unity YAML ---------------------------------------------------------------
+# Unity writes these files with LF, so keep LF in the working tree as well:
+# with core.autocrlf=true Git would otherwise convert them to CRLF on checkout
+# and report phantom changes after every save in the Editor.
+# merge=unityyamlmerge enables Unity Smart Merge once the driver is configured
+# (run Tools/setup-git.ps1 once per clone). Without it Git falls back to the
+# regular text merge.
+*.unity              eol=lf merge=unityyamlmerge
+*.prefab             eol=lf merge=unityyamlmerge
+*.asset              eol=lf merge=unityyamlmerge
+*.meta               eol=lf merge=unityyamlmerge
+*.mat                eol=lf merge=unityyamlmerge
+*.anim               eol=lf merge=unityyamlmerge
+*.controller         eol=lf merge=unityyamlmerge
+*.overrideController eol=lf merge=unityyamlmerge
+*.mask               eol=lf merge=unityyamlmerge
+*.playable           eol=lf merge=unityyamlmerge
+*.signal             eol=lf merge=unityyamlmerge
+*.mixer              eol=lf merge=unityyamlmerge
+*.physicMaterial     eol=lf merge=unityyamlmerge
+*.physicsMaterial2D  eol=lf merge=unityyamlmerge
+*.lighting           eol=lf merge=unityyamlmerge
+*.preset             eol=lf merge=unityyamlmerge
+*.renderTexture      eol=lf merge=unityyamlmerge
+*.cubemap            eol=lf merge=unityyamlmerge
+*.flare              eol=lf merge=unityyamlmerge
+*.fontsettings       eol=lf merge=unityyamlmerge
+*.guiskin            eol=lf merge=unityyamlmerge
+*.giparams           eol=lf merge=unityyamlmerge
+*.spriteatlas        eol=lf merge=unityyamlmerge
+*.spriteatlasv2      eol=lf merge=unityyamlmerge
+*.terrainlayer       eol=lf merge=unityyamlmerge
+*.brush              eol=lf merge=unityyamlmerge
+*.shadervariants     eol=lf merge=unityyamlmerge
+*.scenetemplate      eol=lf merge=unityyamlmerge
+
+# --- Other files written by Unity with LF --------------------------------------
+/Packages/*.json      eol=lf
+/ProjectSettings/**   eol=lf
+*.asmdef              eol=lf
+*.asmref              eol=lf
+*.inputactions        eol=lf
+*.shadergraph         eol=lf
+*.shadersubgraph      eol=lf
+*.vfx                 eol=lf
+*.index               eol=lf
+
+# --- Binary files -------------------------------------------------------------
+# No line-ending conversion and no textual diff/merge.
+# FBX/OBJ/RTF are intentionally not listed: some of them are stored as text.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.psd   binary
+*.tga   binary
+*.tif   binary
+*.tiff  binary
+*.exr   binary
+*.hdr   binary
+*.bmp   binary
+*.wav   binary
+*.mp3   binary
+*.ogg   binary
+*.aif   binary
+*.aiff  binary
+*.flac  binary
+*.mp4   binary
+*.mov   binary
+*.webm  binary
+*.ttf   binary
+*.otf   binary
+*.dll   binary
+*.so    binary
+*.aar   binary
+*.jar   binary
+*.bytes binary
+*.zip   binary
+*.7z    binary
+*.pdf   binary
