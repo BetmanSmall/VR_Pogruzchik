@@ -15,7 +15,7 @@ namespace VR_Pogruzchik.Trailer.Editor
     /// </summary>
     public class SetupTrailerScene
     {
-        private const string TrailerScenePath = "Assets/_Core/Scenes/TrailerScene/TrailerScene.unity";
+        private const string TrailerScenePath = "Assets/Scenes/TrailerScene/TrailerScene.unity";
         private const string ForkliftPrefabGuid = "91d53b3ff8e79a14b87c4b6ef3326e15";
         private const string ForkliftAreaPrefabGuid = "3e8313ceea848c145a7dbaf595044d4d";
         private const string PlayerPrefabGuid = "34dd58110285e484ea514de8096e644c";
@@ -146,7 +146,7 @@ namespace VR_Pogruzchik.Trailer.Editor
             serializedController.ApplyModifiedProperties();
 
             // --- Create Timeline asset ---
-            var timelinePath = "Assets/_Core/Scenes/TrailerScene/TrailerTimeline.playable";
+            var timelinePath = "Assets/Scenes/TrailerScene/TrailerTimeline.playable";
             var timeline = ScriptableObject.CreateInstance<TimelineAsset>();
             AssetDatabase.CreateAsset(timeline, timelinePath);
             AssetDatabase.SaveAssets();
@@ -158,7 +158,7 @@ namespace VR_Pogruzchik.Trailer.Editor
 
             // --- Add Recorder ---
             // Create Recorder directory if needed
-            var recorderDir = "Assets/_Core/Scenes/TrailerScene/Recordings";
+            var recorderDir = "Assets/Scenes/TrailerScene/Recordings";
             if (!AssetDatabase.IsValidFolder(recorderDir))
             {
                 System.IO.Directory.CreateDirectory(recorderDir);

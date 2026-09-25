@@ -10,10 +10,10 @@ namespace VR_Pogruzchik.Trailer.Editor
     /// </summary>
     public class AddPalletProps
     {
-        private const string TrailerScenePath = "Assets/_Core/Scenes/TrailerScene/TrailerScene.unity";
-        private const string PalletPrefabPath = "Assets/XRI Starter Kit/Assets/MiniGames/Forklift/Official Unity Assets/Warehouse/Prefabs/Props/Wood_Pallet_01a_snaps011.prefab";
-        private const string BoxPrefabPath = "Assets/XRI Starter Kit/Assets/MiniGames/Forklift/Official Unity Assets/Warehouse/Prefabs/Props/Box_Pallet_02a_snaps011.prefab";
-        private const string ShelfPrefabPath = "Assets/XRI Starter Kit/Assets/MiniGames/Forklift/Official Unity Assets/Warehouse/Prefabs/Props/Shelf_01a_snaps011.prefab";
+        private const string TrailerScenePath = "Assets/Scenes/TrailerScene/TrailerScene.unity";
+        private const string PalletPrefabPath = "Assets/ThirdParty/XRI Starter Kit/Assets/MiniGames/Forklift/Official Unity Assets/Warehouse/Prefabs/Props/Wood_Pallet_01a_snaps011.prefab";
+        private const string BoxPrefabPath = "Assets/ThirdParty/XRI Starter Kit/Assets/MiniGames/Forklift/Official Unity Assets/Warehouse/Prefabs/Props/Box_Pallet_02a_snaps011.prefab";
+        private const string ShelfPrefabPath = "Assets/ThirdParty/XRI Starter Kit/Assets/MiniGames/Forklift/Official Unity Assets/Warehouse/Prefabs/Props/Shelf_01a_snaps011.prefab";
 
         [MenuItem("Window/VR Pogruzchik/Add Pallets & Boxes")]
         public static void AddPallets()
