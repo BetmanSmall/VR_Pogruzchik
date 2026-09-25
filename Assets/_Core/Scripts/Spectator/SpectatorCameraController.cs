@@ -5,6 +5,9 @@ using Unity.Cinemachine;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit.UI;
@@ -13,9 +16,9 @@ namespace VR_Pogruzchik.Spectator
 {
     /// <summary>
     /// Зрительская камера для второго монитора. Рисуется в окно приложения поверх зеркала шлема
-    /// и управляется геймпадом (Xbox 360, Steam Controller через Steam Input).
+    /// и управляется геймпадом (Xbox 360, Steam Controller через Steam Input), клавиатурой и мышью.
     /// Режимы: облёт цели, свободный полёт, точки-штативы, вид из-за спины игрока.
-    /// LIV и шлем не затрагивает: это отдельная камера Unity с Target Eye = None.
+    /// LIV и шлем не затрагивает: это отдельная камера Unity с выключенным XR Rendering.
     /// </summary>
     public class SpectatorCameraController : MonoBehaviour
     {
@@ -39,8 +42,9 @@ namespace VR_Pogruzchik.Spectator
         [Range(0.25f, 1f)] [SerializeField] private float renderScale = 1f;
         [Tooltip("Не рисовать зеркало шлема в окно: окно показывает только зрительскую камеру.")]
         [SerializeField] private bool disableHmdMirror = true;
-        [Tooltip("Геймпад не должен нажимать кнопки VR-интерфейса через навигацию UI.")]
-        [SerializeField] private bool disableUiGamepadNavigation = true;
+        [Tooltip("Геймпад и мышь не должны нажимать кнопки VR-интерфейса.")]
+        [FormerlySerializedAs("disableUiGamepadNavigation")]
+        [SerializeField] private bool disableUiDesktopInput = true;
         [Tooltip("Геймпад работает, даже когда фокус в другом окне (например, в OBS на первом мониторе). Только в сборке.")]
         [SerializeField] private bool gamepadWorksWithoutFocus = true;
         [SerializeField] private bool showModeHint = true;
@@ -64,7 +68,30 @@ namespace VR_Pogruzchik.Spectator
         [SerializeField] private Vector2 fovRange = new(20f, 90f);
         [SerializeField] private float defaultFov = 60f;
 
+        [Header("Keyboard and mouse")]
+        [Tooltip("Градусов поворота на пиксель движения мыши с зажатой правой кнопкой.")]
+        [SerializeField] private float mouseSensitivity = 0.15f;
+        [Tooltip("На какую долю меняется расстояние облёта за щелчок колеса.")]
+        [SerializeField] private float wheelOrbitStep = 0.1f;
+        [Tooltip("На сколько градусов меняется угол обзора за щелчок колеса.")]
+        [SerializeField] private float wheelFovStep = 3f;
+
         private const float HintDuration = 2.5f;
+
+        /// <summary>Ввод за кадр, собранный с геймпада, клавиатуры и мыши.</summary>
+        private struct InputFrame
+        {
+            public Vector2 Move;        // левый стик; стрелки в полёте
+            public Vector2 Look;        // правый стик; стрелки при облёте
+            public Vector2 MouseLook;   // градусы от мыши с зажатой правой кнопкой
+            public float Vertical;      // RT − LT, PageUp − PageDown
+            public float Zoom;          // крестовина ↓ − ↑, «−» и «+»: скорость изменения угла обзора
+            public float Wheel;         // щелчок колеса от себя = +1
+            public bool Fast, Slow;
+            public int ModeStep, TargetStep;
+            public Mode? ModeSelect;
+            public bool Reset;
+        }
 
         private Mode mode;
         private int targetIndex;
@@ -85,7 +112,10 @@ namespace VR_Pogruzchik.Spectator
 
         private float hintUntil;
         private bool helpVisible;
+        private bool helpToggled;
+        private bool cursorCaptured;
         private GUIStyle hintStyle;
+        private Texture2D hintBackground;
 
 #if UNITY_EDITOR
         // В редакторе OpenXR регистрирует раскладки всех профилей, даже выключенных, причём с задержкой,
@@ -126,6 +156,10 @@ namespace VR_Pogruzchik.Spectator
             outputCamera.enabled = true;
             if (outputCamera.TryGetComponent<CinemachineBrain>(out var brain)) brain.enabled = true;
 
+            // URP решает, рисовать ли камеру в шлем, по allowXRRendering, а не по Target Eye.
+            // Зрительская камера должна попадать только в окно, в шлеме остаётся камера XR Origin.
+            outputCamera.GetUniversalAdditionalCameraData().allowXRRendering = false;
+
             orbitFollow = orbitCamera ? orbitCamera.GetComponent<CinemachineOrbitalFollow>() : null;
             if (orbitFollow)
             {
@@ -149,12 +183,15 @@ namespace VR_Pogruzchik.Spectator
             if (gamepadWorksWithoutFocus && !Application.isEditor)
                 InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
 
-            if (disableUiGamepadNavigation)
+            if (disableUiDesktopInput)
             {
+                // Окно показывает зрительскую камеру, а мышь XR UI целится через камеру шлема,
+                // поэтому клики в окне попадали бы в невидимые кнопки
                 foreach (var module in FindObjectsByType<XRUIInputModule>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 {
                     module.enableGamepadInput = false;
                     module.enableJoystickInput = false;
+                    module.enableMouseInput = false;
                 }
             }
 
@@ -170,71 +207,149 @@ namespace VR_Pogruzchik.Spectator
 #endif
             ReleaseOutputTexture();
             SetMirror(false);
+            SetCursorCaptured(false);
+            if (hintBackground) Destroy(hintBackground);
         }
+
+        private void OnDisable() => SetCursorCaptured(false);
 
         private void Update()
         {
             UpdateOutputTarget();
             if (!mirrorApplied) mirrorApplied = SetMirror(disableHmdMirror);
 
-            var pad = Gamepad.current;
-            if (pad == null) return;
-
             float dt = Time.unscaledDeltaTime;
-            Vector2 leftStick = pad.leftStick.ReadValue();
-            Vector2 rightStick = pad.rightStick.ReadValue();
-            float triggers = pad.rightTrigger.ReadValue() - pad.leftTrigger.ReadValue();
-            bool previous = pad.leftShoulder.wasPressedThisFrame || pad.dpad.left.wasPressedThisFrame;
-            bool next = pad.rightShoulder.wasPressedThisFrame || pad.dpad.right.wasPressedThisFrame;
+            var input = ReadInput();
 
-            if (pad.buttonNorth.wasPressedThisFrame) SetMode(StepMode(+1));
-            if (pad.buttonWest.wasPressedThisFrame) SetMode(StepMode(-1));
-            if (pad.buttonSouth.wasPressedThisFrame) ResetView(mode);
-            if (pad.startButton.wasPressedThisFrame) showModeHint = !showModeHint;
-            helpVisible = pad.selectButton.isPressed;
+            if (input.ModeSelect is { } selected) SetMode(selected);
+            else if (input.ModeStep != 0) SetMode(StepMode(input.ModeStep > 0 ? 1 : -1));
+            if (input.Reset) ResetView(mode);
 
-            float zoom = (pad.dpad.down.isPressed ? 1f : 0f) - (pad.dpad.up.isPressed ? 1f : 0f);
-            if (zoom != 0f && LiveCamera() is { } live)
-                live.Lens.FieldOfView = Mathf.Clamp(live.Lens.FieldOfView + zoom * zoomFovSpeed * dt, fovRange.x, fovRange.y);
+            if (LiveCamera() is { } live)
+            {
+                float fov = live.Lens.FieldOfView + input.Zoom * zoomFovSpeed * dt;
+                if (mode != Mode.Orbit) fov -= input.Wheel * wheelFovStep;   // при облёте колесо меняет расстояние
+                live.Lens.FieldOfView = Mathf.Clamp(fov, fovRange.x, fovRange.y);
+            }
 
             switch (mode)
             {
                 case Mode.Orbit:
-                    if (previous) SetTarget(targetIndex - 1);
-                    if (next) SetTarget(targetIndex + 1);
-                    UpdateOrbit(rightStick, triggers, dt);
+                    if (input.TargetStep != 0) SetTarget(targetIndex + input.TargetStep);
+                    UpdateOrbit(input, dt);
                     break;
                 case Mode.FreeFly:
-                    UpdateFreeFly(pad, leftStick, rightStick, triggers, dt);
+                    UpdateFreeFly(input, dt);
                     break;
                 case Mode.Tripods:
-                    if (previous) SetTripod(tripodIndex - 1);
-                    if (next) SetTripod(tripodIndex + 1);
+                    if (input.TargetStep != 0) SetTripod(tripodIndex + input.TargetStep);
                     break;
             }
         }
 
-        private void UpdateOrbit(Vector2 look, float triggers, float dt)
+        private InputFrame ReadInput()
         {
-            if (!orbitFollow) return;
-            orbitFollow.HorizontalAxis.Value = Mathf.Repeat(orbitFollow.HorizontalAxis.Value + look.x * orbitYawSpeed * dt + 180f, 360f) - 180f;
-            orbitFollow.VerticalAxis.Value = Mathf.Clamp(orbitFollow.VerticalAxis.Value - look.y * orbitPitchSpeed * dt, orbitPitchRange.x, orbitPitchRange.y);
-            // RT приближает, LT отдаляет
-            orbitFollow.Radius = Mathf.Clamp(orbitFollow.Radius - triggers * orbitZoomSpeed * dt, orbitRadiusRange.x, orbitRadiusRange.y);
+            var input = new InputFrame();
+            bool helpHeld = false;
+
+            if (Gamepad.current is { } pad)
+            {
+                input.Move = pad.leftStick.ReadValue();
+                input.Look = pad.rightStick.ReadValue();
+                input.Vertical = pad.rightTrigger.ReadValue() - pad.leftTrigger.ReadValue();
+                input.Zoom = Axis(pad.dpad.down, pad.dpad.up);
+                input.Fast = pad.rightShoulder.isPressed;
+                input.Slow = pad.leftShoulder.isPressed;
+                if (pad.buttonNorth.wasPressedThisFrame) input.ModeStep++;
+                if (pad.buttonWest.wasPressedThisFrame) input.ModeStep--;
+                if (pad.rightShoulder.wasPressedThisFrame || pad.dpad.right.wasPressedThisFrame) input.TargetStep++;
+                if (pad.leftShoulder.wasPressedThisFrame || pad.dpad.left.wasPressedThisFrame) input.TargetStep--;
+                input.Reset |= pad.buttonSouth.wasPressedThisFrame;
+                if (pad.startButton.wasPressedThisFrame) showModeHint = !showModeHint;
+                helpHeld = pad.selectButton.isPressed;
+            }
+
+            // Клавиатуру и мышь слушаем только при фокусе окна: геймпад работает и без него,
+            // а набор текста в OBS не должен двигать камеру. W, A, S, D, R, F заняты управлением погрузчиком.
+            bool focused = Application.isFocused;
+            if (focused && Keyboard.current is { } kb)
+            {
+                var arrows = new Vector2(Axis(kb.rightArrowKey, kb.leftArrowKey), Axis(kb.upArrowKey, kb.downArrowKey));
+                if (mode == Mode.FreeFly) input.Move += arrows;
+                else input.Look += arrows;
+                input.Vertical += Axis(kb.pageUpKey, kb.pageDownKey);
+                input.Zoom += Axis(kb.minusKey, kb.equalsKey) + Axis(kb.numpadMinusKey, kb.numpadPlusKey);
+                input.Fast |= kb.shiftKey.isPressed;
+                input.Slow |= kb.ctrlKey.isPressed;
+
+                if (kb.tabKey.wasPressedThisFrame) input.ModeStep += kb.shiftKey.isPressed ? -1 : 1;
+                if (kb.digit1Key.wasPressedThisFrame) input.ModeSelect = Mode.Orbit;
+                if (kb.digit2Key.wasPressedThisFrame) input.ModeSelect = Mode.FreeFly;
+                if (kb.digit3Key.wasPressedThisFrame) input.ModeSelect = Mode.Tripods;
+                if (kb.digit4Key.wasPressedThisFrame) input.ModeSelect = Mode.BehindPlayer;
+                if (kb.periodKey.wasPressedThisFrame) input.TargetStep++;
+                if (kb.commaKey.wasPressedThisFrame) input.TargetStep--;
+                input.Reset |= kb.homeKey.wasPressedThisFrame;
+                if (kb.f1Key.wasPressedThisFrame) helpToggled = !helpToggled;
+                if (kb.f2Key.wasPressedThisFrame) showModeHint = !showModeHint;
+            }
+
+            // Мышь поворачивает камеру только с зажатой правой кнопкой, курсор на это время прячется
+            var mouse = focused ? Mouse.current : null;
+            bool mouseLook = mouse != null && mouse.rightButton.isPressed;
+            SetCursorCaptured(mouseLook);
+            if (mouse != null)
+            {
+                if (mouseLook) input.MouseLook = mouse.delta.ReadValue() * mouseSensitivity;
+                float scroll = mouse.scroll.ReadValue().y;
+                input.Wheel = scroll > 0f ? 1f : scroll < 0f ? -1f : 0f;
+            }
+
+            input.Move = Vector2.ClampMagnitude(input.Move, 1f);
+            input.Look = Vector2.ClampMagnitude(input.Look, 1f);
+            input.Vertical = Mathf.Clamp(input.Vertical, -1f, 1f);
+            input.Zoom = Mathf.Clamp(input.Zoom, -1f, 1f);
+            helpVisible = helpHeld || helpToggled;
+            return input;
         }
 
-        private void UpdateFreeFly(Gamepad pad, Vector2 move, Vector2 look, float triggers, float dt)
+        private static float Axis(ButtonControl positive, ButtonControl negative) =>
+            (positive.isPressed ? 1f : 0f) - (negative.isPressed ? 1f : 0f);
+
+        private void SetCursorCaptured(bool captured)
         {
-            flyYaw += look.x * lookSpeed * dt;
-            flyPitch = Mathf.Clamp(flyPitch - look.y * lookSpeed * dt, -85f, 85f);
+            if (captured == cursorCaptured) return;
+            cursorCaptured = captured;
+            Cursor.lockState = captured ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !captured;
+        }
+
+        private void UpdateOrbit(InputFrame input, float dt)
+        {
+            if (!orbitFollow) return;
+            float yaw = input.Look.x * orbitYawSpeed * dt + input.MouseLook.x;
+            float pitch = input.Look.y * orbitPitchSpeed * dt + input.MouseLook.y;
+            orbitFollow.HorizontalAxis.Value = Mathf.Repeat(orbitFollow.HorizontalAxis.Value + yaw + 180f, 360f) - 180f;
+            orbitFollow.VerticalAxis.Value = Mathf.Clamp(orbitFollow.VerticalAxis.Value - pitch, orbitPitchRange.x, orbitPitchRange.y);
+
+            // RT и PageUp приближают, LT и PageDown отдаляют; колесо от себя приближает
+            float radius = orbitFollow.Radius - input.Vertical * orbitZoomSpeed * dt;
+            radius *= 1f - input.Wheel * wheelOrbitStep;
+            orbitFollow.Radius = Mathf.Clamp(radius, orbitRadiusRange.x, orbitRadiusRange.y);
+        }
+
+        private void UpdateFreeFly(InputFrame input, float dt)
+        {
+            flyYaw += input.Look.x * lookSpeed * dt + input.MouseLook.x;
+            flyPitch = Mathf.Clamp(flyPitch - input.Look.y * lookSpeed * dt - input.MouseLook.y, -85f, 85f);
             var rotation = Quaternion.Euler(flyPitch, flyYaw, 0f);
 
             float speed = flySpeed;
-            if (pad.rightShoulder.isPressed) speed *= flyFastMultiplier;
-            if (pad.leftShoulder.isPressed) speed *= flySlowMultiplier;
+            if (input.Fast) speed *= flyFastMultiplier;
+            if (input.Slow) speed *= flySlowMultiplier;
 
-            // RT вверх, LT вниз
-            Vector3 wanted = (rotation * new Vector3(move.x, 0f, move.y) + Vector3.up * triggers) * speed;
+            // RT и PageUp вверх, LT и PageDown вниз
+            Vector3 wanted = (rotation * new Vector3(input.Move.x, 0f, input.Move.y) + Vector3.up * input.Vertical) * speed;
             flyVelocity = Vector3.Lerp(flyVelocity, wanted, 1f - Mathf.Exp(-flySmoothing * dt));
 
             var t = freeFlyCamera.transform;
@@ -454,18 +569,30 @@ namespace VR_Pogruzchik.Spectator
         private void OnGUI()
         {
             if (!showModeHint && !helpVisible) return;
-            hintStyle ??= new GUIStyle(GUI.skin.box)
+            if (hintStyle == null)
             {
-                fontSize = Mathf.Max(16, Screen.height / 45),
-                alignment = TextAnchor.UpperLeft,
-                padding = new RectOffset(14, 14, 10, 10),
-                wordWrap = false
-            };
+                // Стандартный фон IMGUI почти прозрачный, на светлых контейнерах текст теряется
+                hintBackground = new Texture2D(1, 1);
+                hintBackground.SetPixel(0, 0, new Color(0f, 0f, 0f, 0.72f));
+                hintBackground.Apply();
+                hintStyle = new GUIStyle(GUI.skin.box)
+                {
+                    fontSize = Mathf.Max(16, Screen.height / 45),
+                    alignment = TextAnchor.UpperLeft,
+                    padding = new RectOffset(14, 14, 10, 10),
+                    wordWrap = false,
+                    normal = { background = hintBackground, textColor = Color.white }
+                };
+            }
 
-            string text = helpVisible ? HelpText : Time.unscaledTime < hintUntil ? HintText() : null;
-            if (text == null) return;
+            if (helpVisible)
+            {
+                DrawHelp();
+                return;
+            }
+            if (Time.unscaledTime >= hintUntil) return;
 
-            var content = new GUIContent(text);
+            var content = new GUIContent(HintText());
             var size = hintStyle.CalcSize(content);
             GUI.Box(new Rect(24, 24, size.x, size.y), content, hintStyle);
         }
@@ -483,15 +610,49 @@ namespace VR_Pogruzchik.Spectator
             return usesTarget ? $"{modeName}: {targetNames[targetIndex]}" : modeName;
         }
 
-        private const string HelpText =
-            "Y / X — следующий / предыдущий режим\n" +
-            "Правый стик — поворот камеры\n" +
-            "Левый стик — движение (свободный полёт)\n" +
-            "RT / LT — ближе / дальше (облёт), вверх / вниз (полёт)\n" +
-            "LB / RB, крестовина ← → — другая цель или штатив\n" +
-            "LB / RB в полёте — медленно / быстро\n" +
-            "Крестовина ↑ ↓ — зум\n" +
-            "A — сбросить вид\n" +
-            "Start — подсказки вкл/выкл, Back — эта справка";
+        private static readonly string[][] HelpRows =
+        {
+            new[] { "", "Геймпад", "Клавиатура и мышь" },
+            new[] { "Режим", "Y / X", "1–4, Tab / Shift+Tab" },
+            new[] { "Поворот", "правый стик", "ПКМ + мышь; стрелки при облёте" },
+            new[] { "Движение (полёт)", "левый стик", "стрелки" },
+            new[] { "Вверх / вниз (полёт)", "RT / LT", "PageUp / PageDown" },
+            new[] { "Ближе / дальше (облёт)", "RT / LT", "PageUp / PageDown, колесо" },
+            new[] { "Быстро / медленно (полёт)", "RB / LB", "Shift / Ctrl" },
+            new[] { "Цель или штатив", "LB / RB, крестовина ← →", "« , » и « . »" },
+            new[] { "Зум", "крестовина ↑ ↓", "« + » и « − », колесо вне облёта" },
+            new[] { "Сбросить вид", "A", "Home" },
+            new[] { "Эта справка", "Back (держать)", "F1" },
+            new[] { "Подсказки вкл/выкл", "Start", "F2" },
+        };
+
+        private GUIStyle helpCellStyle, helpHeaderStyle;
+
+        private void DrawHelp()
+        {
+            helpCellStyle ??= new GUIStyle(GUI.skin.label) { fontSize = hintStyle.fontSize, wordWrap = false };
+            helpHeaderStyle ??= new GUIStyle(helpCellStyle) { fontStyle = FontStyle.Bold };
+
+            var widths = new float[3];
+            foreach (var row in HelpRows)
+                for (int c = 0; c < 3; c++)
+                    widths[c] = Mathf.Max(widths[c], helpHeaderStyle.CalcSize(new GUIContent(row[c])).x);
+
+            const float padding = 14f, gap = 28f;
+            float rowHeight = helpCellStyle.CalcSize(new GUIContent("Ay")).y;
+            var box = new Rect(24, 24, widths.Sum() + gap * 2 + padding * 2, rowHeight * HelpRows.Length + padding * 2);
+            GUI.Box(box, GUIContent.none, hintStyle);
+
+            for (int r = 0; r < HelpRows.Length; r++)
+            {
+                float x = box.x + padding;
+                for (int c = 0; c < 3; c++)
+                {
+                    var style = r == 0 || c == 0 ? helpHeaderStyle : helpCellStyle;
+                    GUI.Label(new Rect(x, box.y + padding + r * rowHeight, widths[c], rowHeight), HelpRows[r][c], style);
+                    x += widths[c] + gap;
+                }
+            }
+        }
     }
 }
