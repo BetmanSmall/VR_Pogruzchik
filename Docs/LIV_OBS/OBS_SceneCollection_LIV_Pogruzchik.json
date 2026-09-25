@@ -3,7 +3,7 @@
     "DesktopAudioDevice1": {
         "prev_ver": 537001986,
         "name": "Звук рабочего стола",
-        "uuid": "a9793583-ba80-4bce-80d2-f78613fe7a45",
+        "uuid": "5cdc53fd-65e9-4f14-8bdb-0a446008e483",
         "id": "wasapi_output_capture",
         "versioned_id": "wasapi_output_capture",
         "settings": {
@@ -34,7 +34,7 @@
     "AuxAudioDevice1": {
         "prev_ver": 537001986,
         "name": "Микрофон",
-        "uuid": "ffa37737-5c55-4c14-9803-96166ff1a79c",
+        "uuid": "3c9cc8ef-161e-4f86-97f6-34d9e23380ac",
         "id": "wasapi_input_capture",
         "versioned_id": "wasapi_input_capture",
         "settings": {
@@ -66,7 +66,7 @@
         {
             "prev_ver": 537001986,
             "name": "LIV Output (смешанная реальность)",
-            "uuid": "5519c852-e061-4eee-85a0-3913326106e3",
+            "uuid": "7afced91-4864-4416-9038-7c172c7efe1a",
             "id": "game_capture",
             "versioned_id": "game_capture",
             "settings": {
@@ -99,8 +99,8 @@
         },
         {
             "prev_ver": 537001986,
-            "name": "Вид из шлема (окно тренажёра)",
-            "uuid": "a8e046f0-8221-40e8-b5cc-3dcea55d475c",
+            "name": "Окно тренажёра (зрительская камера)",
+            "uuid": "d90030d4-f84b-4080-af87-b47ea3f2e6d8",
             "id": "game_capture",
             "versioned_id": "game_capture",
             "settings": {
@@ -134,7 +134,7 @@
         {
             "prev_ver": 537001986,
             "name": "Звук тренажёра",
-            "uuid": "ed0f10e0-7fb3-4ed0-86db-67e3d969cb3d",
+            "uuid": "fd8dd1a8-599d-4e9c-a30c-f116b8d717f7",
             "id": "wasapi_process_output_capture",
             "versioned_id": "wasapi_process_output_capture",
             "settings": {
@@ -166,7 +166,7 @@
         {
             "prev_ver": 537001986,
             "name": "Титр: название",
-            "uuid": "b2aed7ff-b4ad-4227-b136-b0314f366caf",
+            "uuid": "4ed9d0bd-7de1-4ef1-9e7b-3d787e99ca13",
             "id": "text_gdiplus",
             "versioned_id": "text_gdiplus_v3",
             "settings": {
@@ -204,7 +204,7 @@
         {
             "prev_ver": 537001986,
             "name": "Фон заставки",
-            "uuid": "4c4fb7e1-1289-4bb9-8c9e-183e591accd8",
+            "uuid": "145e807a-634a-4cb5-8d67-8164cc5fcb22",
             "id": "color_source",
             "versioned_id": "color_source_v3",
             "settings": {
@@ -232,7 +232,7 @@
         {
             "prev_ver": 537001986,
             "name": "Заставка: заголовок",
-            "uuid": "df4ee518-8db8-479c-8a2c-083fba51f142",
+            "uuid": "bc292969-2f4e-4981-963d-0093084056f6",
             "id": "text_gdiplus",
             "versioned_id": "text_gdiplus_v3",
             "settings": {
@@ -268,7 +268,7 @@
         {
             "prev_ver": 537001986,
             "name": "Заставка: подзаголовок",
-            "uuid": "0e87e2a6-52be-4335-83a4-78f453c4819a",
+            "uuid": "3b2238bf-4744-426a-8e2d-afaf3f9fe11b",
             "id": "text_gdiplus",
             "versioned_id": "text_gdiplus_v3",
             "settings": {
@@ -303,8 +303,8 @@
         },
         {
             "prev_ver": 537001986,
-            "name": "1. LIV — смешанная реальность",
-            "uuid": "e36895d7-9e69-4b1e-b33b-68283e5264b4",
+            "name": "1. Только MR",
+            "uuid": "a1bdab7a-e780-44e1-a614-64e704b78677",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -313,7 +313,7 @@
                 "items": [
                     {
                         "name": "LIV Output (смешанная реальность)",
-                        "source_uuid": "5519c852-e061-4eee-85a0-3913326106e3",
+                        "source_uuid": "7afced91-4864-4416-9038-7c172c7efe1a",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -352,7 +352,7 @@
                     },
                     {
                         "name": "Титр: название",
-                        "source_uuid": "b2aed7ff-b4ad-4227-b136-b0314f366caf",
+                        "source_uuid": "4ed9d0bd-7de1-4ef1-9e7b-3d787e99ca13",
                         "visible": false,
                         "locked": false,
                         "rot": 0.0,
@@ -391,7 +391,7 @@
                     },
                     {
                         "name": "Звук тренажёра",
-                        "source_uuid": "ed0f10e0-7fb3-4ed0-86db-67e3d969cb3d",
+                        "source_uuid": "fd8dd1a8-599d-4e9c-a30c-f116b8d717f7",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -452,8 +452,8 @@
         },
         {
             "prev_ver": 537001986,
-            "name": "2. Вид из шлема",
-            "uuid": "41e4c973-51ca-4a91-8834-0b0da94c0a21",
+            "name": "2. Только зрительская камера",
+            "uuid": "7b98db35-688d-4fd6-9605-8ce44ed3622e",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -461,8 +461,8 @@
                 "id_counter": 2,
                 "items": [
                     {
-                        "name": "Вид из шлема (окно тренажёра)",
-                        "source_uuid": "a8e046f0-8221-40e8-b5cc-3dcea55d475c",
+                        "name": "Окно тренажёра (зрительская камера)",
+                        "source_uuid": "d90030d4-f84b-4080-af87-b47ea3f2e6d8",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -501,7 +501,7 @@
                     },
                     {
                         "name": "Звук тренажёра",
-                        "source_uuid": "ed0f10e0-7fb3-4ed0-86db-67e3d969cb3d",
+                        "source_uuid": "fd8dd1a8-599d-4e9c-a30c-f116b8d717f7",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -562,8 +562,8 @@
         },
         {
             "prev_ver": 537001986,
-            "name": "3. MR + вид из шлема",
-            "uuid": "82f2b41d-6eea-4e02-b2cf-7d4695a5b9b8",
+            "name": "3. MR + зрительская камера",
+            "uuid": "91dce03e-0210-49b0-bab8-7a3832ba40dd",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -572,7 +572,7 @@
                 "items": [
                     {
                         "name": "LIV Output (смешанная реальность)",
-                        "source_uuid": "5519c852-e061-4eee-85a0-3913326106e3",
+                        "source_uuid": "7afced91-4864-4416-9038-7c172c7efe1a",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -610,8 +610,8 @@
                         "private_settings": {}
                     },
                     {
-                        "name": "Вид из шлема (окно тренажёра)",
-                        "source_uuid": "a8e046f0-8221-40e8-b5cc-3dcea55d475c",
+                        "name": "Окно тренажёра (зрительская камера)",
+                        "source_uuid": "d90030d4-f84b-4080-af87-b47ea3f2e6d8",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -650,7 +650,7 @@
                     },
                     {
                         "name": "Звук тренажёра",
-                        "source_uuid": "ed0f10e0-7fb3-4ed0-86db-67e3d969cb3d",
+                        "source_uuid": "fd8dd1a8-599d-4e9c-a30c-f116b8d717f7",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -711,8 +711,157 @@
         },
         {
             "prev_ver": 537001986,
-            "name": "4. Заставка",
-            "uuid": "a4090c4a-66a9-472e-b785-806d4494faa8",
+            "name": "4. Зрительская камера + MR",
+            "uuid": "b1e33d2e-b6d9-4241-842b-f7e9daaa2f5e",
+            "id": "scene",
+            "versioned_id": "scene",
+            "settings": {
+                "custom_size": false,
+                "id_counter": 3,
+                "items": [
+                    {
+                        "name": "Окно тренажёра (зрительская камера)",
+                        "source_uuid": "d90030d4-f84b-4080-af87-b47ea3f2e6d8",
+                        "visible": true,
+                        "locked": false,
+                        "rot": 0.0,
+                        "align": 5,
+                        "bounds_type": 2,
+                        "bounds_align": 0,
+                        "bounds_crop": false,
+                        "crop_left": 0,
+                        "crop_top": 0,
+                        "crop_right": 0,
+                        "crop_bottom": 0,
+                        "id": 1,
+                        "group_item_backup": false,
+                        "pos": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "bounds": {
+                            "x": 1920.0,
+                            "y": 1080.0
+                        },
+                        "scale_filter": "disable",
+                        "blend_method": "default",
+                        "blend_type": "normal",
+                        "show_transition": {
+                            "duration": 0
+                        },
+                        "hide_transition": {
+                            "duration": 0
+                        },
+                        "private_settings": {}
+                    },
+                    {
+                        "name": "LIV Output (смешанная реальность)",
+                        "source_uuid": "7afced91-4864-4416-9038-7c172c7efe1a",
+                        "visible": true,
+                        "locked": false,
+                        "rot": 0.0,
+                        "align": 5,
+                        "bounds_type": 2,
+                        "bounds_align": 0,
+                        "bounds_crop": false,
+                        "crop_left": 0,
+                        "crop_top": 0,
+                        "crop_right": 0,
+                        "crop_bottom": 0,
+                        "id": 2,
+                        "group_item_backup": false,
+                        "pos": {
+                            "x": 1408.0,
+                            "y": 778.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "bounds": {
+                            "x": 480.0,
+                            "y": 270.0
+                        },
+                        "scale_filter": "disable",
+                        "blend_method": "default",
+                        "blend_type": "normal",
+                        "show_transition": {
+                            "duration": 0
+                        },
+                        "hide_transition": {
+                            "duration": 0
+                        },
+                        "private_settings": {}
+                    },
+                    {
+                        "name": "Звук тренажёра",
+                        "source_uuid": "fd8dd1a8-599d-4e9c-a30c-f116b8d717f7",
+                        "visible": true,
+                        "locked": false,
+                        "rot": 0.0,
+                        "align": 5,
+                        "bounds_type": 0,
+                        "bounds_align": 0,
+                        "bounds_crop": false,
+                        "crop_left": 0,
+                        "crop_top": 0,
+                        "crop_right": 0,
+                        "crop_bottom": 0,
+                        "id": 3,
+                        "group_item_backup": false,
+                        "pos": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "scale_filter": "disable",
+                        "blend_method": "default",
+                        "blend_type": "normal",
+                        "show_transition": {
+                            "duration": 0
+                        },
+                        "hide_transition": {
+                            "duration": 0
+                        },
+                        "private_settings": {}
+                    }
+                ]
+            },
+            "mixers": 0,
+            "sync": 0,
+            "flags": 0,
+            "volume": 1.0,
+            "balance": 0.5,
+            "enabled": true,
+            "muted": false,
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "hotkeys": {
+                "OBSBasic.SelectScene": []
+            },
+            "deinterlace_mode": 0,
+            "deinterlace_field_order": 0,
+            "monitoring_type": 0,
+            "private_settings": {},
+            "canvas_uuid": "6c69626f-6273-4c00-9d88-c5136d61696e"
+        },
+        {
+            "prev_ver": 537001986,
+            "name": "5. Заставка",
+            "uuid": "48f78050-c89c-4947-a080-d552fc9cb47e",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -721,7 +870,7 @@
                 "items": [
                     {
                         "name": "Фон заставки",
-                        "source_uuid": "4c4fb7e1-1289-4bb9-8c9e-183e591accd8",
+                        "source_uuid": "145e807a-634a-4cb5-8d67-8164cc5fcb22",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -760,7 +909,7 @@
                     },
                     {
                         "name": "Заставка: заголовок",
-                        "source_uuid": "df4ee518-8db8-479c-8a2c-083fba51f142",
+                        "source_uuid": "bc292969-2f4e-4981-963d-0093084056f6",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -799,7 +948,7 @@
                     },
                     {
                         "name": "Заставка: подзаголовок",
-                        "source_uuid": "0e87e2a6-52be-4335-83a4-78f453c4819a",
+                        "source_uuid": "3b2238bf-4744-426a-8e2d-afaf3f9fe11b",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -862,20 +1011,23 @@
     "groups": [],
     "scene_order": [
         {
-            "name": "1. LIV — смешанная реальность"
+            "name": "1. Только MR"
         },
         {
-            "name": "2. Вид из шлема"
+            "name": "2. Только зрительская камера"
         },
         {
-            "name": "3. MR + вид из шлема"
+            "name": "3. MR + зрительская камера"
         },
         {
-            "name": "4. Заставка"
+            "name": "4. Зрительская камера + MR"
+        },
+        {
+            "name": "5. Заставка"
         }
     ],
-    "current_scene": "1. LIV — смешанная реальность",
-    "current_program_scene": "1. LIV — смешанная реальность",
+    "current_scene": "1. Только MR",
+    "current_program_scene": "1. Только MR",
     "canvases": [],
     "current_transition": "Затухание",
     "transition_duration": 300,
