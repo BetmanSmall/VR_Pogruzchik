@@ -181,7 +181,12 @@ namespace VR_Pogruzchik.Spectator
             // Клавиатура погрузчика и трейлера читается через старый Input и по-прежнему зависит от фокуса.
             // В редакторе настройки не трогаем: там это ассет проекта, а не копия в памяти.
             if (gamepadWorksWithoutFocus && !Application.isEditor)
+            {
                 InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+                // SteamVR забирает фокус при запуске, и Input System успевает отключить клавиатуру.
+                // В режиме IgnoreFocus он её уже не включает обратно, поэтому включаем сами.
+                EnableDesktopDevices();
+            }
 
             if (disableUiDesktopInput)
             {
@@ -212,6 +217,22 @@ namespace VR_Pogruzchik.Spectator
         }
 
         private void OnDisable() => SetCursorCaptured(false);
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus && InputSystem.settings.backgroundBehavior == InputSettings.BackgroundBehavior.IgnoreFocus)
+                EnableDesktopDevices();
+        }
+
+        /// <summary>
+        /// Включает клавиатуру, мышь и геймпады, которые Input System отключил на время работы в фоне.
+        /// </summary>
+        private static void EnableDesktopDevices()
+        {
+            foreach (var device in InputSystem.devices)
+                if (!device.enabled && device is Keyboard or Mouse or Gamepad)
+                    InputSystem.EnableDevice(device);
+        }
 
         private void Update()
         {
